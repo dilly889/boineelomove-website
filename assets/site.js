@@ -305,23 +305,38 @@
     });
   }
 
-  /* ---- contact form (no backend; graceful success) ---- */
+  /* ---- contact form -> WhatsApp ---- */
   var cform = document.querySelector('[data-enquiry]');
   if(cform){
     cform.addEventListener('submit', function(e){
       e.preventDefault();
       var data = new FormData(cform);
-      var name = (data.get('name')||'there').toString().split(' ')[0];
-      var dest = (data.get('destination')||'').toString();
+      var name     = (data.get('name')||'').toString().trim();
+      var email    = (data.get('email')||'').toString().trim();
+      var phone    = (data.get('phone')||'').toString().trim();
+      var tripType = (data.get('tripType')||'').toString().trim();
+      var dest     = (data.get('destination')||'').toString().trim();
+      var when     = (data.get('when')||'').toString().trim();
+      var message  = (data.get('message')||'').toString().trim();
+      var lines = ['Hi BoineeloMove! I would like to enquire about a trip. Here are my details:',''];
+      if(name)     lines.push('Name: ' + name);
+      if(email)    lines.push('Email: ' + email);
+      if(phone)    lines.push('Phone: ' + phone);
+      if(tripType) lines.push('Trip type: ' + tripType);
+      if(dest)     lines.push('Destination: ' + dest);
+      if(when)     lines.push('When: ' + when);
+      if(message)  lines.push('', 'About my trip:', message);
+      var waUrl = 'https://wa.me/27645198120?text=' + encodeURIComponent(lines.join('\n'));
       var wrap = cform.parentElement;
       var ok = document.createElement('div');
       ok.className = 'form-success reveal in';
-      ok.innerHTML = '<h3 class="serif" style="font-size:30px;">Thank you, ' + name + '!</h3>' +
-        '<p style="margin:0 0 18px;">Your enquiry' + (dest ? ' about <strong>' + dest + '</strong>' : '') +
-        ' is on its way. We\u2019ll be in touch shortly to start curating your journey.</p>' +
-        '<a href="https://wa.me/27645198120" target="_blank" rel="noopener" class="btn btn-gold">Chat now on WhatsApp <span class="arrow">→</span></a>';
+      ok.innerHTML = '<h3 class="serif" style="font-size:30px;">Thank you, ' + (name.split(' ')[0]||'there') + '!</h3>' +
+        '<p style="margin:0 0 18px;">Your details are ready' + (dest ? ' about <strong>' + dest + '</strong>' : '') +
+        '. Click below to send your enquiry via WhatsApp.</p>' +
+        '<a href="' + waUrl + '" target="_blank" rel="noopener" class="btn btn-gold">Send via WhatsApp <span class="arrow">→</span></a>';
       cform.style.display = 'none';
       wrap.appendChild(ok);
+      window.open(waUrl, '_blank');
     });
   }
 })();

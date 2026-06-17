@@ -88,6 +88,33 @@
     });
   });
 
+  /* ---- YouTube carousel ---- */
+  (function(){
+    var stage = document.querySelector('.yt-stage');
+    if(!stage) return;
+    var vids = ['mLLG1hsMzaM','itjSJXtmbTI','DcvmuyB1wY0'];
+    var active = 0;
+    var cards = stage.querySelectorAll('.yt-card');
+    function getPos(i){ var d=((i-active)%3+3)%3; return d===0?'center':d===1?'right':'left'; }
+    function render(){
+      cards.forEach(function(c,i){
+        var p=getPos(i);
+        c.dataset.pos=p;
+        if(p==='center'){
+          if(!c.querySelector('iframe')){
+            c.innerHTML='<iframe src="https://www.youtube.com/embed/'+vids[i]+'?rel=0" title="BoineeloMove video" frameborder="0" allow="accelerometer;autoplay;clipboard-write;encrypted-media;gyroscope;picture-in-picture" allowfullscreen></iframe>';
+          }
+        } else {
+          c.innerHTML='<img src="https://img.youtube.com/vi/'+vids[i]+'/mqdefault.jpg" alt="BoineeloMove travel video" />';
+        }
+      });
+    }
+    render();
+    stage.querySelector('.yt-prev').addEventListener('click',function(e){ e.stopPropagation(); active=(active-1+3)%3; render(); });
+    stage.querySelector('.yt-next').addEventListener('click',function(e){ e.stopPropagation(); active=(active+1)%3; render(); });
+    cards.forEach(function(c,i){ c.addEventListener('click',function(){ if(c.dataset.pos!=='center'){ active=i; render(); } }); });
+  })();
+
   /* ---- group trips search ---- */
   var gtSearch = document.getElementById('gt-search');
   if(gtSearch){

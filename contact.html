@@ -1,0 +1,749 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Contact | BoineeloMove</title>
+<meta name="description" content="Start a conversation with BoineeloMove. Enquire about a private journey, join a group departure, or simply say hello." />
+<link rel="icon" type="image/svg+xml" href="favicon.svg" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Inter:wght@400;450;500;600&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="assets/site.css" />
+<style>
+/* ============================================================
+   CONTACT, page-specific styles
+   Builds on the shared system. Tokens untouched.
+   ============================================================ */
+
+/* ---------- HERO ---------- */
+.pagehero.ct-hero{ min-height:62vh; background:#0f0d0a; }
+.pagehero.ct-hero::after{
+  background:
+    linear-gradient(110deg, rgba(8,7,5,.75) 0%, rgba(8,7,5,.30) 50%, rgba(8,7,5,.55) 100%),
+    linear-gradient(to top, rgba(8,7,5,.80) 0%, rgba(8,7,5,.18) 50%, rgba(8,7,5,.4) 100%);
+}
+.ct-hero h1 .em{ font-style:italic; color:var(--gold-2); font-weight:400; }
+.ct-hero__meta{
+  display:flex; gap:30px; flex-wrap:wrap; margin-top:32px;
+  color:rgba(255,255,255,.75); font-size:13px; letter-spacing:.06em;
+}
+.ct-hero__meta span{ display:flex; align-items:center; gap:9px; }
+.ct-hero__meta span::before{ content:""; width:6px; height:6px; border-radius:50%; background:var(--gold); box-shadow:0 0 0 4px rgba(184,145,42,.18); }
+
+/* ---------- CONTACT DETAILS CARDS ---------- */
+.ct-cards{ display:grid; grid-template-columns:repeat(4,1fr); gap:22px; }
+.ct-card{
+  position:relative; background:var(--surface);
+  border:1px solid var(--line-2); border-radius:14px;
+  padding:32px 28px 30px; overflow:hidden;
+  transition:transform .55s var(--ease), box-shadow .55s var(--ease), border-color .55s var(--ease);
+  display:flex; flex-direction:column; gap:14px;
+  text-align:left;
+}
+.ct-card::before{
+  content:""; position:absolute; left:0; top:0; height:2px; width:36px;
+  background:var(--gold); transition:width .6s var(--ease), background .6s var(--ease);
+}
+.ct-card:hover{
+  transform:translateY(-6px) scale(1.02);
+  border-color:rgba(201,162,75,.55);
+  box-shadow:0 30px 56px -30px rgba(28,26,23,.32);
+}
+.ct-card:hover::before{ width:100%; background:linear-gradient(90deg, var(--gold-2), var(--gold)); }
+
+.ct-card__ic{
+  width:54px; height:54px; border-radius:14px;
+  background:var(--gold-soft); display:grid; place-items:center;
+  color:var(--gold-deep); margin-bottom:6px;
+  transition:.5s var(--ease);
+  filter:saturate(.95);
+}
+.ct-card__ic svg{ width:24px; height:24px; }
+.ct-card:hover .ct-card__ic{
+  background:var(--gold); color:#fff;
+  transform:scale(1.06) rotate(-3deg);
+  filter:saturate(1.2) brightness(1.05);
+}
+
+.ct-card h3{ font-size:21px; line-height:1.1; margin:0; }
+.ct-card .lbl{
+  font-size:11px; letter-spacing:.18em; text-transform:uppercase;
+  color:var(--gold-deep); margin:0;
+}
+.ct-card a, .ct-card .v{
+  font-family:var(--sans); font-size:15px; color:var(--text);
+  font-weight:450; line-height:1.5;
+}
+.ct-card a:hover{ color:var(--gold-deep); }
+.ct-card .sub{ font-size:13px; color:var(--muted); margin:0; }
+
+@media(max-width:1024px){ .ct-cards{ grid-template-columns:1fr 1fr; } }
+@media(max-width:520px){ .ct-cards{ grid-template-columns:1fr; } }
+
+/* ---------- FORM SECTION ---------- */
+.ct-form-section{ position:relative; }
+.ct-form-wrap{
+  background:var(--surface); border:1px solid var(--line-2);
+  border-radius:18px; padding:clamp(28px,4vw,46px);
+  box-shadow:0 30px 60px -34px rgba(28,26,23,.18);
+  transition:transform .8s var(--ease), opacity .8s var(--ease), box-shadow .8s var(--ease);
+}
+@media (prefers-reduced-motion:no-preference){
+  .ct-form-wrap.invite-in{ opacity:.98; transform:scale(.98); }
+  .ct-form-wrap.invite-in.is-here{
+    opacity:1; transform:scale(1);
+    box-shadow:0 36px 70px -34px rgba(28,26,23,.22);
+  }
+}
+
+.ct-form-wrap h3{ font-size:30px; margin-bottom:8px; }
+.ct-form-wrap .sub{ font-size:14.5px; color:var(--muted); margin:0 0 24px; max-width:48ch; }
+
+/* sequential field reveal */
+@media (prefers-reduced-motion:no-preference){
+  .form .field, .form .form__row, .form .submit-row{
+    opacity:0; transform:translateY(14px);
+    transition:opacity .65s var(--ease), transform .65s var(--ease);
+  }
+  .ct-form-wrap.is-here .form .field,
+  .ct-form-wrap.is-here .form .form__row,
+  .ct-form-wrap.is-here .form .submit-row{
+    opacity:1; transform:none;
+  }
+  .ct-form-wrap.is-here .form > *:nth-child(1){ transition-delay:.05s; }
+  .ct-form-wrap.is-here .form > *:nth-child(2){ transition-delay:.13s; }
+  .ct-form-wrap.is-here .form > *:nth-child(3){ transition-delay:.21s; }
+  .ct-form-wrap.is-here .form > *:nth-child(4){ transition-delay:.29s; }
+  .ct-form-wrap.is-here .form > *:nth-child(5){ transition-delay:.37s; }
+  .ct-form-wrap.is-here .form > *:nth-child(6){ transition-delay:.45s; }
+  .ct-form-wrap.is-here .form > *:nth-child(7){ transition-delay:.53s; }
+}
+
+/* field placeholder + focus refinement */
+.field input, .field select, .field textarea{
+  transition:border-color .35s var(--ease), box-shadow .35s var(--ease), background .35s var(--ease);
+}
+.field input::placeholder, .field textarea::placeholder{
+  transition:color .35s var(--ease), transform .35s var(--ease);
+}
+.field input:focus::placeholder, .field textarea:focus::placeholder{
+  color:#cdc7bb; transform:translateX(3px);
+}
+
+/* SUBMIT button: scale-up on hover, brief scale-down on press */
+.submit-row{ display:flex; align-items:center; gap:18px; flex-wrap:wrap; margin-top:6px; }
+.btn-send{ position:relative; min-width:200px; justify-content:center; transition:transform .35s var(--ease), box-shadow .35s var(--ease), background .35s var(--ease); }
+.btn-send:hover{ transform:translateY(-3px) scale(1.03); box-shadow:inset 0 1px 0 rgba(255,255,255,.18), 0 22px 44px -14px rgba(184,145,42,.55); }
+.btn-send:active{ transform:scale(.98); transition-duration:.12s; }
+.btn-send.is-loading{ pointer-events:none; opacity:.94; }
+.btn-send .send-label{ display:inline-flex; align-items:center; gap:10px; }
+.btn-send .spinner{
+  display:none; width:16px; height:16px; border:2px solid rgba(255,255,255,.4);
+  border-top-color:#fff; border-radius:50%; animation:spin .7s linear infinite;
+}
+.btn-send.is-loading .send-label{ display:none; }
+.btn-send.is-loading .spinner{ display:inline-block; }
+@keyframes spin{ to{ transform:rotate(360deg); } }
+
+.form__note{ font-size:13px; color:var(--muted-2); margin:0; }
+
+/* success message animation */
+.form-success{
+  opacity:0; transform:translateY(14px);
+  transition:opacity .7s var(--ease), transform .7s var(--ease);
+}
+.form-success.is-here{ opacity:1; transform:none; }
+
+/* error state for fields (smooth) */
+.field.has-error input,
+.field.has-error select,
+.field.has-error textarea{
+  border-color:#c25e3a;
+  box-shadow:0 0 0 3px rgba(194,94,58,.14);
+}
+.field .err{
+  font-size:12.5px; color:#a8482a; max-height:0; overflow:hidden;
+  transition:max-height .4s var(--ease), opacity .4s var(--ease);
+  opacity:0;
+}
+.field.has-error .err{ max-height:30px; opacity:1; padding-top:4px; }
+
+/* sidebar / info card refinement */
+.ct-side{ display:flex; flex-direction:column; gap:22px; }
+.ct-side .info-card{ box-shadow:0 18px 36px -26px rgba(28,26,23,.18); }
+.ct-side .info-row .ic{ transition:transform .4s var(--ease), background .4s var(--ease); }
+.ct-side .info-row:hover .ic{ background:var(--gold); color:#fff; transform:scale(1.08); }
+
+/* WhatsApp CTA banner */
+.wa-banner{
+  position:relative; overflow:hidden;
+  background:linear-gradient(120deg, #1a7f4b 0%, #25d366 60%, #1ea355 100%);
+  color:#fff; border-radius:18px;
+  padding:clamp(34px,4vw,50px);
+  display:grid; grid-template-columns:1fr auto; gap:28px; align-items:center;
+  box-shadow:0 26px 50px -24px rgba(20,127,73,.4);
+}
+.wa-banner::before{
+  content:""; position:absolute; inset:auto -120px -120px auto;
+  width:340px; height:340px; border-radius:50%;
+  background:radial-gradient(circle, rgba(255,255,255,.16), transparent 65%);
+}
+.wa-banner__l h3{ font-size:30px; color:#fff; margin:0 0 6px; }
+.wa-banner__l p{ color:rgba(255,255,255,.86); margin:0; max-width:48ch; font-size:14.5px; }
+.wa-banner__l .small{ color:rgba(255,255,255,.7); font-size:12.5px; letter-spacing:.18em; text-transform:uppercase; margin-bottom:8px; display:inline-flex; align-items:center; gap:9px; }
+.wa-banner__l .small::before{ content:""; width:8px; height:8px; border-radius:50%; background:#fff; box-shadow:0 0 0 4px rgba(255,255,255,.18); animation:wa-blink 2.4s infinite; }
+@keyframes wa-blink{ 0%,100%{opacity:1;} 50%{opacity:.45;} }
+
+.wa-banner__btn{
+  display:inline-flex; align-items:center; gap:14px;
+  background:#fff; color:#1a7f4b;
+  padding:18px 28px; border-radius:50px;
+  font-family:var(--sans); font-weight:600; letter-spacing:.06em;
+  text-transform:uppercase; font-size:13px;
+  transition:transform .4s var(--ease), box-shadow .4s var(--ease);
+  position:relative; z-index:1;
+}
+.wa-banner__btn svg{ width:22px; height:22px; }
+.wa-banner__btn:hover{ transform:translateY(-3px) scale(1.03); box-shadow:0 22px 38px -16px rgba(0,0,0,.32); }
+
+@media(max-width:760px){
+  .wa-banner{ grid-template-columns:1fr; text-align:left; }
+  .wa-banner__btn{ justify-content:center; }
+}
+
+/* SOCIALS */
+.social-grid{ display:grid; grid-template-columns:repeat(3,1fr); gap:18px; }
+.social-card{
+  background:var(--surface); border:1px solid var(--line-2);
+  border-radius:14px; padding:26px 24px;
+  display:flex; align-items:center; gap:16px;
+  transition:transform .5s var(--ease), border-color .5s var(--ease), box-shadow .5s var(--ease);
+}
+.social-card:hover{
+  transform:translateY(-5px) scale(1.02);
+  border-color:rgba(201,162,75,.5);
+  box-shadow:0 24px 44px -26px rgba(28,26,23,.28);
+}
+.social-card__ic{
+  width:54px; height:54px; border-radius:14px;
+  background:var(--gold-soft); display:grid; place-items:center;
+  color:var(--gold-deep); flex-shrink:0;
+  transition:.45s var(--ease);
+}
+.social-card__ic svg{ width:22px; height:22px; transition:transform .45s var(--ease); }
+.social-card:hover .social-card__ic{ background:var(--gold); color:#fff; }
+.social-card:hover .social-card__ic svg{ transform:scale(1.12); }
+.social-card .h{ font-family:var(--serif); font-size:21px; line-height:1.05; margin:0 0 3px; }
+.social-card .s{ font-size:13px; color:var(--muted); margin:0; }
+.social-card .arrow{
+  margin-left:auto; color:var(--gold-deep); font-size:18px;
+  transition:transform .4s var(--ease);
+}
+.social-card:hover .arrow{ transform:translateX(5px); }
+
+@media(max-width:760px){ .social-grid{ grid-template-columns:1fr; } }
+</style>
+</head>
+<body>
+
+<!-- ===================== NAV ===================== -->
+<nav class="nav">
+  <a href="index.html" class="nav__logo" aria-label="BoineeloMove home">
+    <img src="https://boineelomove.com/wp-content/uploads/2023/07/Logo-removebg-preview-1.png" alt="BoineeloMove" onerror="this.style.display='none'; this.nextElementSibling.style.display='inline';" />
+    <span class="mark" style="display:none;">Boineelo<b>Move</b></span>
+  </a>
+  <ul class="nav__links">
+    <li><a href="index.html">Home</a></li>
+    <li><a href="about.html">About</a></li>
+    <li><a href="group-trips.html">Group Trips</a></li>
+    <li><a href="private-trips.html">Private Trips</a></li>
+    <li><a href="gallery.html">Gallery</a></li>
+    <li><a href="contact.html" aria-current="page">Contact</a></li>
+  </ul>
+  <div class="nav__right">
+    <a href="#enquiry" class="btn btn-gold">Enquire <span class="arrow">→</span></a>
+    <button class="nav__search" id="nav-search-btn" aria-label="Search destinations">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+    </button>
+    <button class="nav__burger" aria-label="Open menu"><span></span><span></span><span></span></button>
+  </div>
+</nav>
+
+<!-- mobile drawer -->
+<div class="drawer">
+  <button class="drawer__close" aria-label="Close menu">✕</button>
+  <a href="index.html">Home</a>
+  <a href="about.html">About</a>
+  <a href="group-trips.html">Group Trips</a>
+  <a href="private-trips.html">Private Trips</a>
+  <a href="gallery.html">Gallery</a>
+  <a href="contact.html">Contact</a>
+  <div class="drawer__contact">
+    <span>+27 64 519 8120</span>
+    <span>contact@boineelomove.com</span>
+    <span>Sandton, GP · South Africa</span>
+  </div>
+</div>
+
+<!-- ===================== PAGE HERO ===================== -->
+<header class="pagehero ct-hero" data-screen-label="Contact / Hero">
+  <div class="pagehero__bg frame" data-label="[ CONTACT HERO, PHOTO ]" style="background:#0f0d0a;">
+    <img src="https://images.unsplash.com/photo-1580060839134-75a5edca2e99?w=1800&h=1100&fit=crop&q=85&auto=format" alt="" aria-hidden="true" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center 45%;" />
+  </div>
+  <div class="wrap pagehero__inner">
+    <div class="crumb reveal"><a href="index.html">Home</a> &nbsp;/&nbsp; Contact</div>
+    <h1 class="reveal" data-d="2" style="margin-top:18px;">Let's <span class="em">start a journey</span></h1>
+    <p class="reveal" data-d="3">Tell us who's travelling, where you're dreaming of and the moment you want to make. We'll come back to you, warmly and quickly, with a quiet plan to begin.</p>
+    <div class="ct-hero__meta reveal" data-d="4">
+      <span>Responses within 24 hours</span>
+      <span>Speak directly to a planner</span>
+      <span>No fee to enquire</span>
+    </div>
+  </div>
+</header>
+
+<!-- ===================== CONTACT DETAILS ===================== -->
+<section class="section-pad" data-screen-label="Contact / Details" style="padding-top:clamp(56px,8vw,90px);">
+  <div class="wrap">
+    <div class="center reveal" style="max-width:620px; margin:0 auto 50px;">
+      <span class="eyebrow center">Reach us directly</span>
+      <h2 class="h2" style="margin-top:14px;">A few ways to <em style="color:var(--gold-deep);">say hello.</em></h2>
+    </div>
+
+    <div class="ct-cards">
+      <article class="ct-card reveal">
+        <div class="ct-card__ic">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.91.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+        </div>
+        <div>
+          <p class="lbl">Call us</p>
+          <h3><a href="tel:+27645198120">+27 64 519 8120</a></h3>
+        </div>
+        <p class="sub">Mon – Fri, 09:00 – 17:00 SAST</p>
+      </article>
+
+      <article class="ct-card reveal" data-d="1">
+        <div class="ct-card__ic">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+        </div>
+        <div>
+          <p class="lbl">Email</p>
+          <h3><a href="mailto:contact@boineelomove.com">contact@boineelomove.com</a></h3>
+        </div>
+        <p class="sub">We reply within 24 hours, often sooner.</p>
+      </article>
+
+      <article class="ct-card reveal" data-d="2">
+        <div class="ct-card__ic">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M16 3C9 3 3.4 8.6 3.4 15.6c0 2.4.7 4.7 1.9 6.7L3 29l6.9-2.2c1.9 1 4 1.6 6.1 1.6 7 0 12.6-5.6 12.6-12.6S23 3 16 3zm5.7 15c-.3-.2-1.8-.9-2.1-1s-.5-.2-.7.2-.8 1-1 1.2-.4.3-.7.1a8.5 8.5 0 0 1-2.5-1.5 9.4 9.4 0 0 1-1.7-2.2c-.2-.3 0-.5.1-.7l.5-.6c.2-.2.2-.3.3-.5s0-.4 0-.6-.7-1.8-1-2.4c-.3-.6-.5-.5-.7-.5h-.6c-.2 0-.6.1-.9.4-.3.3-1.2 1.2-1.2 2.9s1.2 3.4 1.4 3.6c.2.3 2.5 3.8 6 5.3.8.4 1.5.6 2 .7.8.3 1.6.2 2.2.1.7-.1 2.1-.8 2.4-1.7.3-.8.3-1.6.2-1.7-.1-.2-.3-.2-.6-.4z"/></svg>
+        </div>
+        <div>
+          <p class="lbl">WhatsApp</p>
+          <h3><a href="https://wa.me/27645198120" target="_blank" rel="noopener">Chat with a planner</a></h3>
+        </div>
+        <p class="sub">The fastest way to reach us, answers in minutes.</p>
+      </article>
+
+      <article class="ct-card reveal" data-d="3">
+        <div class="ct-card__ic">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+        </div>
+        <div>
+          <p class="lbl">Studio</p>
+          <h3>Sandton, GP</h3>
+        </div>
+        <p class="sub">South Africa, by appointment.</p>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== ENQUIRY FORM ===================== -->
+<section class="section-pad ct-form-section" id="enquiry" style="background:var(--bg-2);" data-screen-label="Contact / Enquiry">
+  <div class="wrap">
+    <div class="contact-grid">
+
+      <div class="ct-form-wrap invite-in" data-invite>
+        <span class="eyebrow">Begin an enquiry</span>
+        <h3 class="serif" style="font-size:38px; margin-top:14px;">Tell us about your journey.</h3>
+        <p class="sub">Share a little about who's travelling and what you have in mind. A planner will be in touch shortly with the next, considered step.</p>
+
+        <form class="form" data-enquiry novalidate>
+          <div class="form__row">
+            <div class="field">
+              <label for="ct-name">Full name</label>
+              <input type="text" id="ct-name" name="name" placeholder="Your name" required />
+              <div class="err">Please share your name.</div>
+            </div>
+            <div class="field">
+              <label for="ct-email">Email</label>
+              <input type="email" id="ct-email" name="email" placeholder="you@example.com" required />
+              <div class="err">A valid email helps us reply.</div>
+            </div>
+          </div>
+
+          <div class="form__row">
+            <div class="field">
+              <label for="ct-phone">Phone <span style="color:var(--muted-2); text-transform:none; letter-spacing:0;">(optional)</span></label>
+              <input type="tel" id="ct-phone" name="phone" placeholder="+27 …" />
+              <div class="err"></div>
+            </div>
+            <div class="field">
+              <label for="ct-trip-type">Trip type</label>
+              <select id="ct-trip-type" name="tripType" required>
+                <option value="">Choose one</option>
+                <option>Private journey</option>
+                <option>Group trip</option>
+                <option>Honeymoon</option>
+                <option>Family</option>
+                <option>Not sure yet</option>
+              </select>
+              <div class="err">Pick the closest match.</div>
+            </div>
+          </div>
+
+          <div class="form__row">
+            <div class="field">
+              <label for="ct-destination">Destination of interest</label>
+              <input type="text" id="ct-destination" name="destination" placeholder="e.g. Zanzibar, Cape Town, anywhere…" />
+              <div class="err"></div>
+            </div>
+            <div class="field">
+              <label for="ct-when">When</label>
+              <input type="text" id="ct-when" name="when" placeholder="e.g. June 2026 · flexible" />
+              <div class="err"></div>
+            </div>
+          </div>
+
+          <div class="field">
+            <label for="ct-message">Tell us about your trip</label>
+            <textarea id="ct-message" name="message" placeholder="Travellers, dates, the moments you want, anything we should know…" required></textarea>
+            <div class="err">A few lines help us begin the right way.</div>
+          </div>
+
+          <div class="submit-row">
+            <button type="submit" class="btn btn-gold btn-send">
+              <span class="send-label">Send enquiry <span class="arrow">→</span></span>
+              <span class="spinner" aria-hidden="true"></span>
+            </button>
+            <p class="form__note">We'll reply within 24 hours, usually sooner.</p>
+          </div>
+        </form>
+      </div>
+
+      <aside class="ct-side reveal" data-d="2">
+        <div class="info-card">
+          <h3 class="serif" style="font-size:26px; margin:0 0 6px;">Quick details</h3>
+          <p style="margin:0 0 14px; color:var(--muted); font-size:14px;">Everything you need to reach us, at a glance.</p>
+
+          <div class="info-row">
+            <div class="ic">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.91.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+            </div>
+            <div><h4>Phone</h4><a href="tel:+27645198120">+27 64 519 8120</a></div>
+          </div>
+          <div class="info-row">
+            <div class="ic">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+            </div>
+            <div><h4>Email</h4><a href="mailto:contact@boineelomove.com">contact@boineelomove.com</a></div>
+          </div>
+          <div class="info-row">
+            <div class="ic">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+            </div>
+            <div><h4>Hours</h4><span>Mon – Fri · 09:00 – 17:00 SAST</span></div>
+          </div>
+          <div class="info-row">
+            <div class="ic">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+            </div>
+            <div><h4>Studio</h4><span>Sandton, GP · South Africa</span></div>
+          </div>
+
+          <a href="https://wa.me/27645198120" target="_blank" rel="noopener" class="wa-cta">
+            <svg viewBox="0 0 32 32" fill="currentColor"><path d="M16 3C9 3 3.4 8.6 3.4 15.6c0 2.4.7 4.7 1.9 6.7L3 29l6.9-2.2c1.9 1 4 1.6 6.1 1.6 7 0 12.6-5.6 12.6-12.6S23 3 16 3zm0 22.8c-1.9 0-3.7-.5-5.3-1.5l-.4-.2-4.1 1.3 1.3-4-.2-.4a10.3 10.3 0 0 1-1.6-5.6c0-5.7 4.7-10.4 10.4-10.4S26.4 9.9 26.4 15.6 21.7 25.8 16 25.8zm5.7-7.8c-.3-.2-1.8-.9-2.1-1s-.5-.2-.7.2-.8 1-1 1.2-.4.3-.7.1a8.5 8.5 0 0 1-2.5-1.5 9.4 9.4 0 0 1-1.7-2.2c-.2-.3 0-.5.1-.7l.5-.6c.2-.2.2-.3.3-.5s0-.4 0-.6-.7-1.8-1-2.4c-.3-.6-.5-.5-.7-.5h-.6c-.2 0-.6.1-.9.4-.3.3-1.2 1.2-1.2 2.9s1.2 3.4 1.4 3.6c.2.3 2.5 3.8 6 5.3.8.4 1.5.6 2 .7.8.3 1.6.2 2.2.1.7-.1 2.1-.8 2.4-1.7.3-.8.3-1.6.2-1.7-.1-.2-.3-.2-.6-.4z"/></svg>
+            <div><div class="t">Chat on WhatsApp</div><div class="s">Fastest way to reach a planner</div></div>
+          </a>
+        </div>
+      </aside>
+
+    </div>
+  </div>
+</section>
+
+<!-- ===================== WHATSAPP CTA BANNER ===================== -->
+<section class="section-pad" style="padding-block:clamp(48px,7vw,90px);" data-screen-label="Contact / WhatsApp banner">
+  <div class="wrap">
+    <div class="wa-banner reveal">
+      <div class="wa-banner__l">
+        <div class="small">Online now</div>
+        <h3>Prefer a quick conversation?</h3>
+        <p>Send us a WhatsApp, a planner will reply within minutes during studio hours. Great for quick questions and quotes.</p>
+      </div>
+      <a href="https://wa.me/27645198120" target="_blank" rel="noopener" class="wa-banner__btn">
+        <svg viewBox="0 0 32 32" fill="currentColor"><path d="M16 3C9 3 3.4 8.6 3.4 15.6c0 2.4.7 4.7 1.9 6.7L3 29l6.9-2.2c1.9 1 4 1.6 6.1 1.6 7 0 12.6-5.6 12.6-12.6S23 3 16 3zm5.7 15c-.3-.2-1.8-.9-2.1-1s-.5-.2-.7.2-.8 1-1 1.2-.4.3-.7.1a8.5 8.5 0 0 1-2.5-1.5 9.4 9.4 0 0 1-1.7-2.2c-.2-.3 0-.5.1-.7l.5-.6c.2-.2.2-.3.3-.5s0-.4 0-.6-.7-1.8-1-2.4c-.3-.6-.5-.5-.7-.5h-.6c-.2 0-.6.1-.9.4-.3.3-1.2 1.2-1.2 2.9s1.2 3.4 1.4 3.6c.2.3 2.5 3.8 6 5.3.8.4 1.5.6 2 .7.8.3 1.6.2 2.2.1.7-.1 2.1-.8 2.4-1.7.3-.8.3-1.6.2-1.7-.1-.2-.3-.2-.6-.4z"/></svg>
+        <span>Start a chat</span>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== SOCIAL MEDIA ===================== -->
+<section class="section-pad" style="padding-top:clamp(40px,5vw,80px);" data-screen-label="Contact / Socials">
+  <div class="wrap">
+    <div class="center reveal" style="max-width:620px; margin:0 auto 44px;">
+      <span class="eyebrow center">Travel with us</span>
+      <h2 class="h2" style="margin-top:14px;">Follow the <em style="color:var(--gold-deep);">journey.</em></h2>
+      <p class="lead" style="margin-top:12px;">A daily window into the stays, sundowners and quiet moments from across our travellers' trips.</p>
+    </div>
+
+    <div class="social-grid">
+      <a class="social-card reveal" href="https://instagram.com/boineelomove_travel" target="_blank" rel="noopener">
+        <div class="social-card__ic">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg>
+        </div>
+        <div>
+          <p class="h">Instagram</p>
+          <p class="s">@boineelomove_travel</p>
+        </div>
+        <span class="arrow">↗</span>
+      </a>
+      <a class="social-card reveal" data-d="1" href="https://www.tiktok.com/@boineelomove" target="_blank" rel="noopener">
+        <div class="social-card__ic">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M16 3c.3 2 1.5 3.4 3.5 3.7v2.6c-1.3 0-2.5-.4-3.5-1v5.6a5.4 5.4 0 1 1-5.4-5.4c.3 0 .6 0 .9.1v2.7a2.7 2.7 0 1 0 1.9 2.6V3H16z"/></svg>
+        </div>
+        <div>
+          <p class="h">TikTok</p>
+          <p class="s">@boineelomove</p>
+        </div>
+        <span class="arrow">↗</span>
+      </a>
+      <a class="social-card reveal" data-d="2" href="https://youtube.com/@Boineelomove" target="_blank" rel="noopener">
+        <div class="social-card__ic">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M22 8.2a3 3 0 0 0-2.1-2.1C18 5.6 12 5.6 12 5.6s-6 0-7.9.5A3 3 0 0 0 2 8.2 31 31 0 0 0 1.7 12 31 31 0 0 0 2 15.8a3 3 0 0 0 2.1 2.1c1.9.5 7.9.5 7.9.5s6 0 7.9-.5a3 3 0 0 0 2.1-2.1c.3-1.3.3-3.8.3-3.8s0-2.5-.3-3.8zM10 15V9l5 3-5 3z"/></svg>
+        </div>
+        <div>
+          <p class="h">YouTube</p>
+          <p class="s">@Boineelomove</p>
+        </div>
+        <span class="arrow">↗</span>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== FAQ ===================== -->
+<section class="section-pad" style="background:var(--bg-2);" data-screen-label="Contact / FAQ">
+  <div class="wrap">
+    <div class="center reveal" style="max-width:600px; margin:0 auto 50px;">
+      <span class="eyebrow center">Before you write</span>
+      <h2 class="h2" style="margin-top:14px;">Frequently asked.</h2>
+    </div>
+
+    <div class="faq">
+      <div class="faq-item reveal">
+        <button class="faq-q">How soon will I hear back? <span class="faq-icon" aria-hidden="true"></span></button>
+        <div class="faq-a"><p>Within 24 hours, often the same day during studio hours. WhatsApp is the fastest path, usually answered within minutes Mon–Fri.</p></div>
+      </div>
+      <div class="faq-item reveal" data-d="1">
+        <button class="faq-q">Is there a fee to enquire? <span class="faq-icon" aria-hidden="true"></span></button>
+        <div class="faq-a"><p>No. Our enquiry process and initial proposal are entirely complimentary. You only pay when you're delighted with the journey we've designed for you.</p></div>
+      </div>
+      <div class="faq-item reveal" data-d="2">
+        <button class="faq-q">I'm not sure where to go yet, can you still help? <span class="faq-icon" aria-hidden="true"></span></button>
+        <div class="faq-a"><p>Absolutely. Many of our most loved journeys begin as "somewhere warm" or "anywhere we won't forget." Tell us the mood you want and we'll do the rest.</p></div>
+      </div>
+      <div class="faq-item reveal" data-d="3">
+        <button class="faq-q">Do you arrange flights too? <span class="faq-icon" aria-hidden="true"></span></button>
+        <div class="faq-a"><p>Yes, international and regional flights, transfers and any onward connection can be included. We'll quote them clearly so the whole journey is in one place.</p></div>
+      </div>
+      <div class="faq-item reveal" data-d="4">
+        <button class="faq-q">Can I visit the studio? <span class="faq-icon" aria-hidden="true"></span></button>
+        <div class="faq-a"><p>Our Sandton studio is by appointment. We're happy to host you for a planning session, drop us a note and we'll find a time that works.</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== CTA BAND ===================== -->
+<section class="cta-band" data-screen-label="Contact / CTA">
+  <div class="cta-band__bg frame" data-label="[ DESTINATION, PHOTO ]" style="background:#0f0d0a;">
+    <img src="https://images.unsplash.com/photo-1582719508461-905c673771fd?w=1800&h=900&fit=crop&q=85&auto=format" alt="" aria-hidden="true" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center 40%;" />
+  </div>
+  <div class="wrap"><div class="cta-band__inner reveal">
+    <span class="eyebrow">One short note begins it all</span>
+    <h2 class="h2">Your next journey<br /><em style="color:var(--gold-2); font-style:italic;">starts here.</em></h2>
+    <p>However you'd like to reach us, we'll be ready, warm, considered and quick to reply.</p>
+    <div style="display:flex; gap:14px; flex-wrap:wrap;">
+      <a href="#enquiry" class="btn btn-gold">Begin an enquiry <span class="arrow">→</span></a>
+      <a href="https://wa.me/27645198120" target="_blank" rel="noopener" class="btn btn-light" style="background:#25d366; box-shadow:0 10px 28px -10px rgba(37,211,102,.5);">Chat on WhatsApp</a>
+    </div>
+  </div></div>
+</section>
+
+<!-- ===================== FOOTER ===================== -->
+<footer class="footer">
+  <div class="wrap">
+    <div class="footer__top">
+      <div class="footer__brand">
+        <div class="mark">Boineelo<b>Move</b></div>
+        <p>A boutique South African tour operator crafting bucket-list group and private journeys across Africa and the world.</p>
+        <div class="footer__socials">
+          <a href="https://instagram.com/boineelomove_travel" target="_blank" rel="noopener" aria-label="Instagram"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg></a>
+          <a href="https://www.tiktok.com/@boineelomove" target="_blank" rel="noopener" aria-label="TikTok"><svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor"><path d="M16 3c.3 2 1.5 3.4 3.5 3.7v2.6c-1.3 0-2.5-.4-3.5-1v5.6a5.4 5.4 0 1 1-5.4-5.4c.3 0 .6 0 .9.1v2.7a2.7 2.7 0 1 0 1.9 2.6V3H16z"/></svg></a>
+          <a href="https://youtube.com/@Boineelomove" target="_blank" rel="noopener" aria-label="YouTube"><svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor"><path d="M22 8.2a3 3 0 0 0-2.1-2.1C18 5.6 12 5.6 12 5.6s-6 0-7.9.5A3 3 0 0 0 2 8.2 31 31 0 0 0 1.7 12 31 31 0 0 0 2 15.8a3 3 0 0 0 2.1 2.1c1.9.5 7.9.5 7.9.5s6 0 7.9-.5a3 3 0 0 0 2.1-2.1c.3-1.3.3-3.8.3-3.8s0-2.5-.3-3.8zM10 15V9l5 3-5 3z"/></svg></a>
+        </div>
+      </div>
+      <div>
+        <h4>Explore</h4>
+        <ul>
+          <li><a href="index.html">Home</a></li>
+          <li><a href="about.html">About Us</a></li>
+          <li><a href="gallery.html">Gallery</a></li>
+          <li><a href="contact.html">Contact</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Trips</h4>
+        <ul>
+          <li><a href="group-trips.html">Group Trips</a></li>
+          <li><a href="private-trips.html">Private Trips</a></li>
+          <li><a href="contact.html">Plan a Journey</a></li>
+        </ul>
+      </div>
+      <div class="footer__contact">
+        <h4>Get in touch</h4>
+        <a href="tel:+27645198120">+27 64 519 8120</a>
+        <a href="mailto:contact@boineelomove.com">contact@boineelomove.com</a>
+        <span>Sandton, GP · South Africa</span>
+        <a href="https://wa.me/27645198120" target="_blank" rel="noopener" style="color:var(--gold-deep);">Chat on WhatsApp →</a>
+      </div>
+    </div>
+    <div class="footer__bottom">
+      <span>© <span data-year>2026</span> BoineeloMove. All rights reserved.</span>
+      <span>Travel more · Break barriers · Make memories</span>
+    </div>
+  </div>
+</footer>
+
+<!-- ===================== WHATSAPP FLOAT ===================== -->
+<a class="wa" href="https://wa.me/27645198120" target="_blank" rel="noopener" aria-label="Chat on WhatsApp">
+  <svg viewBox="0 0 32 32" fill="currentColor"><path d="M16 3C9 3 3.4 8.6 3.4 15.6c0 2.4.7 4.7 1.9 6.7L3 29l6.9-2.2c1.9 1 4 1.6 6.1 1.6 7 0 12.6-5.6 12.6-12.6S23 3 16 3zm0 22.8c-1.9 0-3.7-.5-5.3-1.5l-.4-.2-4.1 1.3 1.3-4-.2-.4a10.3 10.3 0 0 1-1.6-5.6c0-5.7 4.7-10.4 10.4-10.4S26.4 9.9 26.4 15.6 21.7 25.8 16 25.8zm5.7-7.8c-.3-.2-1.8-.9-2.1-1s-.5-.2-.7.2-.8 1-1 1.2-.4.3-.7.1a8.5 8.5 0 0 1-2.5-1.5 9.4 9.4 0 0 1-1.7-2.2c-.2-.3 0-.5.1-.7l.5-.6c.2-.2.2-.3.3-.5s0-.4 0-.6-.7-1.8-1-2.4c-.3-.6-.5-.5-.7-.5h-.6c-.2 0-.6.1-.9.4-.3.3-1.2 1.2-1.2 2.9s1.2 3.4 1.4 3.6c.2.3 2.5 3.8 6 5.3.8.4 1.5.6 2 .7.8.3 1.6.2 2.2.1.7-.1 2.1-.8 2.4-1.7.3-.8.3-1.6.2-1.7-.1-.2-.3-.2-.6-.4z"/></svg>
+</a>
+
+<script src="assets/photos.js"></script>
+<script src="assets/site.js"></script>
+
+<!-- ===================== CONTACT PAGE LOGIC ===================== -->
+<script>
+(function(){
+  "use strict";
+
+  /* ---------- form scroll-triggered invite-in (opacity + scale 0.98 → 1) ---------- */
+  var invite = document.querySelector('[data-invite]');
+  function inviteCheck(){
+    if(!invite) return;
+    var r = invite.getBoundingClientRect();
+    var vh = window.innerHeight;
+    if(r.top < vh * 0.78 && r.bottom > 0){
+      invite.classList.add('is-here');
+    }
+  }
+  window.addEventListener('scroll', inviteCheck, {passive:true});
+  window.addEventListener('resize', inviteCheck);
+  inviteCheck();
+  setTimeout(inviteCheck, 200);
+
+  /* ---------- gentle inline validation with smooth error reveal ---------- */
+  var form = document.querySelector('[data-enquiry]');
+  if(!form) return;
+  var sendBtn = form.querySelector('.btn-send');
+
+  function isEmail(v){ return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v); }
+
+  function validateField(field){
+    var input = field.querySelector('input, select, textarea');
+    if(!input) return true;
+    var v = (input.value || '').trim();
+    var required = input.hasAttribute('required');
+    var ok = true;
+    if(required && !v) ok = false;
+    if(input.type === 'email' && v && !isEmail(v)) ok = false;
+    field.classList.toggle('has-error', !ok);
+    return ok;
+  }
+
+  // re-validate on blur once user has interacted
+  form.querySelectorAll('.field').forEach(function(field){
+    var input = field.querySelector('input, select, textarea');
+    if(!input) return;
+    input.addEventListener('blur', function(){
+      if(input.value.trim() || field.classList.contains('has-error')) validateField(field);
+    });
+    input.addEventListener('input', function(){
+      if(field.classList.contains('has-error')) validateField(field);
+    });
+  });
+
+  // hijack site.js submit, we want validation + loading state BEFORE the success swap
+  form.addEventListener('submit', function(e){
+    var fields = form.querySelectorAll('.field');
+    var allOk = true;
+    fields.forEach(function(f){ if(!validateField(f)) allOk = false; });
+    if(!allOk){
+      e.preventDefault(); e.stopImmediatePropagation();
+      var first = form.querySelector('.field.has-error');
+      if(first){
+        var top = first.getBoundingClientRect().top + window.scrollY - 140;
+        window.scrollTo({ top: top, behavior:'smooth' });
+        var input = first.querySelector('input, select, textarea');
+        if(input) setTimeout(function(){ input.focus(); }, 350);
+      }
+      return false;
+    }
+    // ok → premium loading state, then let site.js's submit handler run after a beat
+    if(sendBtn) sendBtn.classList.add('is-loading');
+    // stop the default form submit & let site.js animation play, then animate success in
+    e.preventDefault();
+    e.stopImmediatePropagation();
+    setTimeout(function(){
+      var data  = new FormData(form);
+      var name  = (data.get('name')        || '').toString().trim();
+      var email = (data.get('email')       || '').toString().trim();
+      var phone = (data.get('phone')       || '').toString().trim();
+      var type  = (data.get('tripType')    || '').toString().trim();
+      var dest  = (data.get('destination') || '').toString().trim();
+      var when  = (data.get('when')        || '').toString().trim();
+      var msg   = (data.get('message')     || '').toString().trim();
+
+      var lines = ['*New Enquiry, BoineeloMove Website*', ''];
+      lines.push('*Name:* ' + name);
+      lines.push('*Email:* ' + email);
+      if(phone) lines.push('*Phone:* ' + phone);
+      if(type)  lines.push('*Trip type:* ' + type);
+      if(dest)  lines.push('*Destination:* ' + dest);
+      if(when)  lines.push('*When:* ' + when);
+      if(msg)   lines.push('', '*Message:*', msg);
+
+      var waUrl = 'https://wa.me/27645198120?text=' + encodeURIComponent(lines.join('\n'));
+      window.open(waUrl, '_blank', 'noopener');
+
+      var firstName = name.split(' ')[0] || 'there';
+      var wrap = form.parentElement;
+      var ok = document.createElement('div');
+      ok.className = 'form-success';
+      ok.innerHTML = '<h3 class="serif" style="font-size:30px;">Thank you, ' + firstName + '!</h3>' +
+        '<p style="margin:0 0 18px;">Your enquiry' + (dest ? ' about <strong>' + dest + '</strong>' : '') +
+        ' has been sent to WhatsApp. A planner will be in touch shortly to begin curating your journey.</p>' +
+        '<a href="' + waUrl + '" target="_blank" rel="noopener" class="btn btn-gold">Open WhatsApp <span class="arrow">→</span></a>';
+      form.style.display = 'none';
+      wrap.appendChild(ok);
+      requestAnimationFrame(function(){ ok.classList.add('is-here'); });
+    }, 900);
+  }, true); // capture phase so we run before site.js's bubble-phase handler
+})();
+</script>
+</body>
+</html>

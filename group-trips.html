@@ -1,0 +1,875 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Group Trips | BoineeloMove</title>
+<meta name="description" content="Travel together, experience more. Join BoineeloMove's sold-out group departures across Africa and the world, effortless, bucket-list journeys with a community of like-minded travellers." />
+<link rel="icon" type="image/svg+xml" href="favicon.svg" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Inter:wght@400;450;500;600&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="assets/site.css" />
+<style>
+/* ============================================================
+   GROUP TRIPS, page-specific styles
+   (extends the shared system; nothing overrides global tokens)
+   ============================================================ */
+
+/* hero text stagger (uses the shared .reveal engine) */
+.pagehero .htext-rise{ }
+
+/* intro */
+.gt-intro{ max-width:780px; margin:0 auto; text-align:center; }
+.gt-intro .lead{ margin-top:22px; }
+
+/* filter bar, centred, sits above the grid */
+.gt-filter{ display:flex; justify-content:center; margin-bottom:46px; }
+
+/* trip card group badge */
+.trip-card .frame{ position:relative; }
+.trip-badge{
+  position:absolute; top:14px; left:14px; z-index:3;
+  display:inline-flex; align-items:center; gap:7px;
+  background:rgba(255,255,255,.92);
+  -webkit-backdrop-filter:blur(6px); backdrop-filter:blur(6px);
+  color:var(--gold-deep); font-size:10.5px; font-weight:600;
+  letter-spacing:.14em; text-transform:uppercase;
+  padding:7px 13px; border-radius:50px;
+  box-shadow:0 6px 18px -6px rgba(28,26,23,.28);
+}
+.trip-badge::before{ content:""; width:6px; height:6px; border-radius:50%; background:var(--gold); }
+
+/* ============================================================
+   HOW IT WORKS, 4-step process
+   ============================================================ */
+.steps{ display:grid; grid-template-columns:repeat(4,1fr); gap:28px; position:relative; }
+.steps::before{
+  content:""; position:absolute; top:38px; left:12.5%; right:12.5%; height:1px;
+  background:linear-gradient(90deg, transparent, var(--line) 12%, var(--line) 88%, transparent);
+  z-index:0;
+}
+.step{ position:relative; z-index:1; text-align:center; }
+.step__ic{
+  width:76px; height:76px; margin:0 auto 24px; border-radius:50%;
+  background:var(--surface); border:1px solid var(--line);
+  display:grid; place-items:center; color:var(--gold-deep);
+  transition:transform .45s var(--ease), background .45s var(--ease), color .45s var(--ease), border-color .45s var(--ease), box-shadow .45s var(--ease);
+}
+.step__ic svg{ width:30px; height:30px; }
+.step:hover .step__ic{
+  background:var(--gold); color:#fff; border-color:var(--gold);
+  transform:translateY(-5px) scale(1.05);
+  box-shadow:0 20px 38px -16px var(--gold-soft);
+}
+.step__n{ font-family:var(--serif); font-size:15px; color:var(--gold-deep); letter-spacing:.08em; }
+.step h3{ font-size:24px; margin:5px 0 11px; }
+.step p{ font-size:14px; max-width:27ch; margin:0 auto; }
+
+@media (prefers-reduced-motion:no-preference){
+  .step.reveal .step__ic{ transform:scale(.55); opacity:0; }
+  .step.reveal.in .step__ic{ transform:scale(1); opacity:1; }
+}
+@media(max-width:860px){
+  .steps{ grid-template-columns:1fr 1fr; gap:40px 24px; }
+  .steps::before{ display:none; }
+}
+@media(max-width:460px){ .steps{ grid-template-columns:1fr; } }
+
+/* ============================================================
+   WHY TRAVEL IN A GROUP, benefit cards (extends .vcard)
+   ============================================================ */
+.bcard{ display:flex; flex-direction:column; }
+.bcard__ic{
+  width:56px; height:56px; border-radius:50%;
+  background:var(--gold-soft); display:grid; place-items:center;
+  color:var(--gold-deep); margin-bottom:20px;
+  transition:transform .4s var(--ease), background .4s var(--ease);
+}
+.bcard__ic svg{ width:26px; height:26px; }
+.bcard:hover .bcard__ic{ transform:scale(1.08); }
+.trio--four{ grid-template-columns:repeat(4,1fr); }
+@media(max-width:1024px){ .trio--four{ grid-template-columns:1fr 1fr; } }
+@media(max-width:560px){ .trio--four{ grid-template-columns:1fr; } }
+
+/* trip card, date & price fields */
+.trip-card__dates{ font-size:12.5px; color:var(--muted); margin:10px 0 4px; line-height:1.6; }
+.trip-card__dates-label{ display:block; font-size:10px; letter-spacing:.14em; text-transform:uppercase; color:var(--muted-2,#9a9488); margin-bottom:3px; font-weight:500; }
+.trip-card__price{ font-family:var(--serif); font-size:22px; color:var(--gold-deep); font-weight:500; margin:10px 0 2px; display:flex; align-items:baseline; gap:6px; flex-wrap:wrap; }
+.trip-card__price small{ font-size:12px; color:var(--muted); font-weight:400; }
+
+/* includes note */
+.gt-note{
+  display:flex; align-items:center; justify-content:center; gap:10px; flex-wrap:wrap;
+  background:var(--surface); border:1px solid var(--line-2); border-radius:6px;
+  padding:14px 22px; font-size:13px; color:var(--muted); text-align:center;
+  margin-bottom:36px;
+}
+.gt-note b{ color:var(--text); font-weight:500; }
+.gt-note__dot{ width:4px; height:4px; border-radius:50%; background:var(--gold); flex-shrink:0; }
+.trip-badge--event{ background:var(--gold) !important; color:#fff !important; }
+</style>
+</head>
+<body>
+
+<!-- ===================== NAV ===================== -->
+<nav class="nav">
+  <a href="index.html" class="nav__logo" aria-label="BoineeloMove home">
+    <img src="https://boineelomove.com/wp-content/uploads/2023/07/Logo-removebg-preview-1.png" alt="BoineeloMove" onerror="this.style.display='none'; this.nextElementSibling.style.display='inline';" />
+    <span class="mark" style="display:none;">Boineelo<b>Move</b></span>
+  </a>
+  <ul class="nav__links">
+    <li><a href="index.html">Home</a></li>
+    <li><a href="about.html">About</a></li>
+    <li><a href="group-trips.html" aria-current="page">Group Trips</a></li>
+    <li><a href="private-trips.html">Private Trips</a></li>
+    <li><a href="gallery.html">Gallery</a></li>
+    <li><a href="contact.html">Contact</a></li>
+  </ul>
+  <div class="nav__right">
+    <a href="contact.html" class="btn btn-gold">Enquire <span class="arrow">→</span></a>
+    <button class="nav__search" id="nav-search-btn" aria-label="Search destinations">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+    </button>
+    <button class="nav__burger" aria-label="Open menu"><span></span><span></span><span></span></button>
+  </div>
+</nav>
+
+<!-- mobile drawer -->
+<div class="drawer">
+  <button class="drawer__close" aria-label="Close menu">✕</button>
+  <a href="index.html">Home</a>
+  <a href="about.html">About</a>
+  <a href="group-trips.html">Group Trips</a>
+  <a href="private-trips.html">Private Trips</a>
+  <a href="gallery.html">Gallery</a>
+  <a href="contact.html">Contact</a>
+  <div class="drawer__contact">
+    <span>+27 64 519 8120</span>
+    <span>contact@boineelomove.com</span>
+    <span>Sandton, GP · South Africa</span>
+  </div>
+</div>
+
+<!-- ===================== PAGE HERO ===================== -->
+<header class="pagehero" data-screen-label="Group Trips / Hero">
+  <div class="pagehero__bg frame" data-label="[ GROUP TRAVEL, PHOTO ]" style="background:#16130f;">
+    <img src="uploads/gallery/886024A7-2B05-4D15-A1D2-E1CF7C6A47D2-scaled-0fef8d6f.jpeg" alt="" aria-hidden="true" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center 38%;" />
+  </div>
+  <div class="wrap pagehero__inner">
+    <div class="crumb reveal"><a href="index.html">Home</a> &nbsp;/&nbsp; Group Trips</div>
+    <span class="eyebrow reveal" data-d="1" style="margin-top:18px;">Adventure, together</span>
+    <h1 class="reveal" data-d="2">Group Trips</h1>
+    <p class="reveal" data-d="3">Travel together, experience more, with sold-out departures to bucket-list destinations, shared with a community of like-minded travellers.</p>
+    <div class="reveal" data-d="4" style="display:flex; gap:14px; flex-wrap:wrap; margin-top:32px;">
+      <a href="contact.html" class="btn btn-gold">Enquire to join <span class="arrow">→</span></a>
+      <a href="#trips" class="btn btn-light" style="background:rgba(255,255,255,.1); border:1px solid rgba(255,255,255,.3); box-shadow:none;">View departures</a>
+    </div>
+  </div>
+</header>
+
+<!-- ===================== INTRO ===================== -->
+<section class="section-pad" data-screen-label="Group Trips / Intro">
+  <div class="wrap">
+    <div class="gt-intro reveal">
+      <span class="eyebrow center">Why group travel</span>
+      <h2 class="h2" style="margin-top:16px;">The best, and most fun,<br />way to travel</h2>
+      <p class="lead">Our group trips are where it all began: five ladies in Cape Town in 2021, now sold-out departures across the globe. They're the easiest way to tick off your bucket list: new adventures, culturally captivating experiences and a brilliant way to expand your network, with every detail curated and handled end to end. You simply show up and enjoy.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== TRIP CARDS GRID ===================== -->
+<section class="section-pad" id="trips" style="background:var(--bg-2); padding-top:clamp(56px,8vw,96px);" data-screen-label="Group Trips / Departures">
+  <div class="wrap">
+    <div class="center reveal" style="max-width:620px; margin:0 auto 38px;">
+      <span class="eyebrow center">2026 – 2027 Departures</span>
+      <h2 class="h2" style="margin-top:16px;">Choose your adventure</h2>
+    </div>
+
+    <div class="gt-filter reveal">
+      <div class="tabs" data-filter-group data-filter-target="#gt-grid">
+        <button class="tab active" data-filter="all">All</button>
+        <button class="tab" data-filter="africa">Africa</button>
+        <button class="tab" data-filter="europe">Europe</button>
+        <button class="tab" data-filter="international">Middle East &amp; Asia</button>
+        <button class="tab" data-filter="special">Special Events</button>
+      </div>
+    </div>
+
+    <div class="gt-search-wrap reveal">
+      <div class="gt-search-box">
+        <svg class="gt-search-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        <input id="gt-search" class="gt-search-input" type="search" placeholder="Search destinations, trips…" autocomplete="off" />
+      </div>
+    </div>
+
+    <div class="gt-note reveal">
+      <b>All packages depart from JHB</b>
+      <span class="gt-note__dot"></span>
+      <span>Return flights, airport transfers &amp; daily breakfast included</span>
+      <span class="gt-note__dot"></span>
+      <span>Deposit from R2,000 (non-refundable)</span>
+    </div>
+
+    <div class="trip-grid" id="gt-grid">
+
+      <!-- 1. Namibia -->
+      <article class="trip-card reveal" data-cat="africa">
+        <div class="frame" data-label="[ NAMIBIA PHOTO ]">
+          <span class="trip-badge">Group Trip</span>
+          <img src="https://images.unsplash.com/photo-1489392191049-fc10c97e64b6?w=1200&h=900&fit=crop&q=85&auto=format" alt="Namibia dunes" loading="lazy" />
+        </div>
+        <div class="trip-card__body">
+          <div class="trip-card__loc">Namibia · Africa</div>
+          <h3 class="trip-card__name">Namibia Desert Escape</h3>
+          <p class="trip-card__desc">Sandwich Harbour, a desert picnic, camel and quad biking, and a catamaran cruise along the Atlantic Coast.</p>
+          <div class="trip-card__dates">
+            <span class="trip-card__dates-label">Departures 2026</span>
+            22–26 Jan &nbsp;·&nbsp; 6–10 Apr &nbsp;·&nbsp; 14–18 Sep &nbsp;·&nbsp; 15–19 Dec
+          </div>
+          <div class="trip-card__price">From R19,800 <small>pps &nbsp;·&nbsp; Deposit R2,000</small></div>
+          <div class="trip-card__meta"><span>◷ 5 Days</span><span>◍ Group</span></div>
+          <a href="contact.html" class="btn btn-ghost">Enquire <span class="arrow">→</span></a>
+        </div>
+      </article>
+
+      <!-- 2. Cape Town -->
+      <article class="trip-card reveal" data-d="1" data-cat="africa">
+        <div class="frame" data-label="[ CAPE TOWN PHOTO ]">
+          <span class="trip-badge">Group Trip</span>
+          <img src="https://images.unsplash.com/photo-1576485290814-1c72aa4bbb8e?w=1200&h=900&fit=crop&q=85&auto=format" alt="Cape Town Table Mountain" loading="lazy" />
+        </div>
+        <div class="trip-card__body">
+          <div class="trip-card__loc">Cape Town · South Africa</div>
+          <h3 class="trip-card__name">Cape Town Ladies Escape</h3>
+          <p class="trip-card__desc">Wine tasting, a sunset cruise, quad biking and slow lounge access, all from the foot of Table Mountain.</p>
+          <div class="trip-card__dates">
+            <span class="trip-card__dates-label">Departures 2026</span>
+            30 Apr – 3 May &nbsp;·&nbsp; 7–10 Aug
+          </div>
+          <div class="trip-card__price">From R15,500 <small>pps &nbsp;·&nbsp; Deposit R2,500</small></div>
+          <div class="trip-card__meta"><span>◷ 4 Days</span><span>◍ Group</span></div>
+          <a href="contact.html" class="btn btn-ghost">Enquire <span class="arrow">→</span></a>
+        </div>
+      </article>
+
+      <!-- 3. Knysna -->
+      <article class="trip-card reveal" data-d="2" data-cat="africa">
+        <div class="frame" data-label="[ KNYSNA PHOTO ]">
+          <span class="trip-badge">Group Trip</span>
+          <img src="https://images.unsplash.com/photo-1534447677768-be436bb09401?w=1200&h=900&fit=crop&q=85&auto=format" alt="Knysna Garden Route" loading="lazy" />
+        </div>
+        <div class="trip-card__body">
+          <div class="trip-card__loc">Knysna · Garden Route, South Africa</div>
+          <h3 class="trip-card__name">Knysna Villa Retreat</h3>
+          <p class="trip-card__desc">A villa on the Garden Route with a sunset yacht cruise, zipline adventure, elephant park and daily dinner included.</p>
+          <div class="trip-card__dates">
+            <span class="trip-card__dates-label">Departures 2026</span>
+            30 Apr – 3 May &nbsp;·&nbsp; 7–10 Aug
+          </div>
+          <div class="trip-card__price">From R22,500 <small>pps &nbsp;·&nbsp; Deposit R4,000</small></div>
+          <div class="trip-card__meta"><span>◷ 4 Days</span><span>◍ Group</span></div>
+          <a href="contact.html" class="btn btn-ghost">Enquire <span class="arrow">→</span></a>
+        </div>
+      </article>
+
+      <!-- 4. Mauritius -->
+      <article class="trip-card reveal" data-d="3" data-cat="africa">
+        <div class="frame" data-label="[ MAURITIUS PHOTO ]">
+          <span class="trip-badge">Group Trip</span>
+          <img src="https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=1200&h=900&fit=crop&q=85&auto=format" alt="Mauritius" loading="lazy" />
+        </div>
+        <div class="trip-card__body">
+          <div class="trip-card__loc">Mauritius · East Africa</div>
+          <h3 class="trip-card__name">Mauritius Island All-Inclusive</h3>
+          <p class="trip-card__desc">Water skiing, glass-bottom boat, snorkelling, kayaks and windsurfing, all meals and local drinks included.</p>
+          <div class="trip-card__dates">
+            <span class="trip-card__dates-label">Departures 2026</span>
+            13–18 Jun &nbsp;·&nbsp; 24–29 Sep
+          </div>
+          <div class="trip-card__price">From R48,400 <small>pps &nbsp;·&nbsp; Deposit R4,000</small></div>
+          <div class="trip-card__meta"><span>◷ 6 Days</span><span>◍ Group</span></div>
+          <a href="contact.html" class="btn btn-ghost">Enquire <span class="arrow">→</span></a>
+        </div>
+      </article>
+
+      <!-- 5. Greece -->
+      <article class="trip-card reveal" data-cat="europe">
+        <div class="frame" data-label="[ GREECE PHOTO ]">
+          <span class="trip-badge">Group Trip</span>
+          <img src="https://images.unsplash.com/photo-1533105079780-92b9be482077?w=1200&h=900&fit=crop&q=85&auto=format" alt="Santorini Greece" loading="lazy" />
+        </div>
+        <div class="trip-card__body">
+          <div class="trip-card__loc">Greece · Europe</div>
+          <h3 class="trip-card__name">Greece Island Escape</h3>
+          <p class="trip-card__desc">Athens city tour, catamaran cruise, Santorini's caldera sunsets and Mykonos, 8 nights with ferry transfers between islands included.</p>
+          <div class="trip-card__dates">
+            <span class="trip-card__dates-label">Departures 2026 &amp; 2027</span>
+            15–24 Jun 2026 &nbsp;·&nbsp; 23 Sep – 2 Oct 2027
+          </div>
+          <div class="trip-card__price">From R58,200 <small>pps &nbsp;·&nbsp; Deposit R4,000</small></div>
+          <div class="trip-card__meta"><span>◷ 10 Days</span><span>◍ Group</span></div>
+          <a href="contact.html" class="btn btn-ghost">Enquire <span class="arrow">→</span></a>
+        </div>
+      </article>
+
+      <!-- 6. Switzerland Summer -->
+      <article class="trip-card reveal" data-d="1" data-cat="europe">
+        <div class="frame" data-label="[ SWITZERLAND SUMMER PHOTO ]">
+          <span class="trip-badge">Group Trip</span>
+          <img src="https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?w=1200&h=900&fit=crop&q=85&auto=format" alt="Switzerland Alps" loading="lazy" />
+        </div>
+        <div class="trip-card__body">
+          <div class="trip-card__loc">Switzerland · Europe</div>
+          <h3 class="trip-card__name">Switzerland Summer Circuit</h3>
+          <p class="trip-card__desc">Zürich, Lucerne and Zermatt, Swiss travel pass, Jungfraujoch in the clouds, Lindt chocolate tour and a day trip to Milan.</p>
+          <div class="trip-card__dates">
+            <span class="trip-card__dates-label">Departure 2027</span>
+            22–30 Jun
+          </div>
+          <div class="trip-card__price">From R69,500 <small>pps &nbsp;·&nbsp; Deposit R4,000</small></div>
+          <div class="trip-card__meta"><span>◷ 9 Days</span><span>◍ Group</span></div>
+          <a href="contact.html" class="btn btn-ghost">Enquire <span class="arrow">→</span></a>
+        </div>
+      </article>
+
+      <!-- 7. Italy -->
+      <article class="trip-card reveal" data-d="2" data-cat="europe">
+        <div class="frame" data-label="[ ITALY PHOTO ]">
+          <span class="trip-badge">Group Trip</span>
+          <img src="https://images.unsplash.com/photo-1552832230-c0197dd311b5?w=1200&h=900&fit=crop&q=85&auto=format" alt="Rome Italy" loading="lazy" />
+        </div>
+        <div class="trip-card__body">
+          <div class="trip-card__loc">Rome · Florence · Milan, Italy</div>
+          <h3 class="trip-card__name">Italian Grand Tour</h3>
+          <p class="trip-card__desc">Rome's ancient city, the Amalfi Coast, Positano's cliffsides, Florence's art and the beauty of Lake Como and Lugano.</p>
+          <div class="trip-card__dates">
+            <span class="trip-card__dates-label">Departures 2026</span>
+            13–21 Jun &nbsp;·&nbsp; 3–11 Oct
+          </div>
+          <div class="trip-card__price">From R59,800 <small>pps &nbsp;·&nbsp; Deposit R4,000</small></div>
+          <div class="trip-card__meta"><span>◷ 9 Days</span><span>◍ Group</span></div>
+          <a href="contact.html" class="btn btn-ghost">Enquire <span class="arrow">→</span></a>
+        </div>
+      </article>
+
+      <!-- 8. Paris & Barcelona -->
+      <article class="trip-card reveal" data-d="3" data-cat="europe">
+        <div class="frame" data-label="[ PARIS PHOTO ]">
+          <span class="trip-badge">Group Trip</span>
+          <img src="https://images.unsplash.com/photo-1502602898657-3e91760cbb34?w=1200&h=900&fit=crop&q=85&auto=format" alt="Paris Eiffel Tower" loading="lazy" />
+        </div>
+        <div class="trip-card__body">
+          <div class="trip-card__loc">Paris &amp; Barcelona · Europe</div>
+          <h3 class="trip-card__name">Paris &amp; Barcelona Explorer</h3>
+          <p class="trip-card__desc">The Seine at sunset, Paris's iconic landmarks, then Barcelona's architecture, Monastery tour and the Mediterranean coast.</p>
+          <div class="trip-card__dates">
+            <span class="trip-card__dates-label">Departures 2026</span>
+            23–30 May &nbsp;·&nbsp; 19–26 Sep
+          </div>
+          <div class="trip-card__price">From R53,500 <small>pps &nbsp;·&nbsp; Deposit R4,000</small></div>
+          <div class="trip-card__meta"><span>◷ 8 Days</span><span>◍ Group</span></div>
+          <a href="contact.html" class="btn btn-ghost">Enquire <span class="arrow">→</span></a>
+        </div>
+      </article>
+
+      <!-- 9. Dubai -->
+      <article class="trip-card reveal" data-cat="international">
+        <div class="frame" data-label="[ DUBAI PHOTO ]">
+          <span class="trip-badge">Group Trip</span>
+          <img src="https://images.unsplash.com/photo-1470723710355-95304d8aece4?w=1200&h=900&fit=crop&q=85&auto=format" alt="Dubai skyline" loading="lazy" />
+        </div>
+        <div class="trip-card__body">
+          <div class="trip-card__loc">Dubai · UAE</div>
+          <h3 class="trip-card__name">Dubai City &amp; Desert</h3>
+          <p class="trip-card__desc">Yacht cruise on the Arabian Gulf, golden-hour desert safari, Miracle garden tour, UAE visa and 5 nights hotel stay included.</p>
+          <div class="trip-card__dates">
+            <span class="trip-card__dates-label">Departures 2027</span>
+            23–29 Apr &nbsp;·&nbsp; 23–29 Sep &nbsp;·&nbsp; 1–6 Dec
+          </div>
+          <div class="trip-card__price">From R37,600 <small>pps &nbsp;·&nbsp; Deposit R4,000</small></div>
+          <div class="trip-card__meta"><span>◷ 7 Days</span><span>◍ Group</span></div>
+          <a href="contact.html" class="btn btn-ghost">Enquire <span class="arrow">→</span></a>
+        </div>
+      </article>
+
+      <!-- 10. Dubai & Thailand -->
+      <article class="trip-card reveal" data-d="1" data-cat="international">
+        <div class="frame" data-label="[ DUBAI THAILAND PHOTO ]">
+          <span class="trip-badge">Group Trip</span>
+          <img src="https://images.unsplash.com/photo-1528181304800-259b08848526?w=1200&h=900&fit=crop&q=85&auto=format" alt="Phuket Thailand" loading="lazy" />
+        </div>
+        <div class="trip-card__body">
+          <div class="trip-card__loc">Dubai &amp; Thailand</div>
+          <h3 class="trip-card__name">Dubai &amp; Thailand Dual Escape</h3>
+          <p class="trip-card__desc">Desert safari and yacht cruise in Dubai, then Phuket's Phi Phi Islands and city tour, 3 nights Dubai, 4 nights Phuket, internal flight included.</p>
+          <div class="trip-card__dates">
+            <span class="trip-card__dates-label">Departures 2027</span>
+            23 Apr – 2 May &nbsp;·&nbsp; 23 Sep – 2 Oct &nbsp;·&nbsp; 1–9 Dec
+          </div>
+          <div class="trip-card__price">From R44,250 <small>pps &nbsp;·&nbsp; Deposit R4,000</small></div>
+          <div class="trip-card__meta"><span>◷ 10 Days</span><span>◍ Group</span></div>
+          <a href="contact.html" class="btn btn-ghost">Enquire <span class="arrow">→</span></a>
+        </div>
+      </article>
+
+      <!-- 11. Bali -->
+      <article class="trip-card reveal" data-d="2" data-cat="international">
+        <div class="frame" data-label="[ BALI PHOTO ]">
+          <span class="trip-badge">Group Trip</span>
+          <img src="https://images.unsplash.com/photo-1604999333679-b86d54738315?w=1200&h=900&fit=crop&q=85&auto=format" alt="Bali" loading="lazy" />
+        </div>
+        <div class="trip-card__body">
+          <div class="trip-card__loc">Bali · Indonesia</div>
+          <h3 class="trip-card__name">Bali Island Adventure</h3>
+          <p class="trip-card__desc">Bali swing &amp; nest, Bali highlight tour, Nusa Penida tour, Ubud vintage car, 7 nights in paradise with every must-see included.</p>
+          <div class="trip-card__dates">
+            <span class="trip-card__dates-label">Departures 2027</span>
+            22–30 Apr &nbsp;·&nbsp; 23 Sep – 1 Oct &nbsp;·&nbsp; 25 Nov – 3 Dec
+          </div>
+          <div class="trip-card__price">From R37,500 <small>pps &nbsp;·&nbsp; Deposit R4,000</small></div>
+          <div class="trip-card__meta"><span>◷ 9 Days</span><span>◍ Group</span></div>
+          <a href="contact.html" class="btn btn-ghost">Enquire <span class="arrow">→</span></a>
+        </div>
+      </article>
+
+      <!-- 12. Bali & Singapore -->
+      <article class="trip-card reveal" data-d="3" data-cat="international">
+        <div class="frame" data-label="[ BALI SINGAPORE PHOTO ]">
+          <span class="trip-badge">Group Trip</span>
+          <img src="https://images.unsplash.com/photo-1525625293386-3f8f99389edd?w=1200&h=900&fit=crop&q=85&auto=format" alt="Singapore Marina Bay" loading="lazy" />
+        </div>
+        <div class="trip-card__body">
+          <div class="trip-card__loc">Bali &amp; Singapore</div>
+          <h3 class="trip-card__name">Bali &amp; Singapore Duo</h3>
+          <p class="trip-card__desc">5 nights in Bali, swing, Nusa Penida and beach clubs, then 2 nights in Singapore for the city tour, Gardens by the Bay and iconic skyline.</p>
+          <div class="trip-card__dates">
+            <span class="trip-card__dates-label">Departures 2027</span>
+            22–30 Apr &nbsp;·&nbsp; 23 Sep – 1 Oct &nbsp;·&nbsp; 25 Nov – 3 Dec
+          </div>
+          <div class="trip-card__price">From R45,500 <small>pps &nbsp;·&nbsp; Deposit R4,000</small></div>
+          <div class="trip-card__meta"><span>◷ 9 Days</span><span>◍ Group</span></div>
+          <a href="contact.html" class="btn btn-ghost">Enquire <span class="arrow">→</span></a>
+        </div>
+      </article>
+
+      <!-- 13. Maldives -->
+      <article class="trip-card reveal" data-cat="international">
+        <div class="frame" data-label="[ MALDIVES PHOTO ]">
+          <span class="trip-badge">Group Trip</span>
+          <img src="https://images.unsplash.com/photo-1514282401047-d79a71a590e8?w=1200&h=900&fit=crop&q=85&auto=format" alt="Maldives overwater villas" loading="lazy" />
+        </div>
+        <div class="trip-card__body">
+          <div class="trip-card__loc">Maldives · South Asia</div>
+          <h3 class="trip-card__name">Maldives Escape</h3>
+          <p class="trip-card__desc">5 nights in paradise, return flights, daily breakfast, lunch &amp; dinner and all local drinks included. Excursions at own cost with resort.</p>
+          <div class="trip-card__dates">
+            <span class="trip-card__dates-label">Flexible Dates</span>
+            Choose your own dates
+          </div>
+          <div class="trip-card__price">From R56,000 <small>pps &nbsp;·&nbsp; Deposit R4,000</small></div>
+          <div class="trip-card__meta"><span>◷ 6 Days</span><span>◍ Group</span></div>
+          <a href="contact.html" class="btn btn-ghost">Enquire <span class="arrow">→</span></a>
+        </div>
+      </article>
+
+      <!-- 14. Maldives & Dubai -->
+      <article class="trip-card reveal" data-d="1" data-cat="international">
+        <div class="frame" data-label="[ MALDIVES DUBAI PHOTO ]">
+          <span class="trip-badge">Group Trip</span>
+          <img src="https://images.unsplash.com/photo-1518684079-3c830dcef090?w=1200&h=900&fit=crop&q=85&auto=format" alt="Dubai at night" loading="lazy" />
+        </div>
+        <div class="trip-card__body">
+          <div class="trip-card__loc">Maldives &amp; Dubai</div>
+          <h3 class="trip-card__name">Maldives &amp; Dubai New Year</h3>
+          <p class="trip-card__desc">Four all-inclusive nights in the Maldives, then ring in the new year with four nights in Dubai, yacht cruise and UAE visa included.</p>
+          <div class="trip-card__dates">
+            <span class="trip-card__dates-label">Departure</span>
+            24 Dec 2026 – 2 Jan 2027
+          </div>
+          <div class="trip-card__price">From R75,900 <small>pps &nbsp;·&nbsp; Deposit R4,000</small></div>
+          <div class="trip-card__meta"><span>◷ 10 Days</span><span>◍ Group</span></div>
+          <a href="contact.html" class="btn btn-ghost">Enquire <span class="arrow">→</span></a>
+        </div>
+      </article>
+
+      <!-- 15. Switzerland Christmas -->
+      <article class="trip-card reveal" data-d="2" data-cat="europe">
+        <div class="frame" data-label="[ SWITZERLAND CHRISTMAS PHOTO ]">
+          <span class="trip-badge">Group Trip</span>
+          <img src="https://images.unsplash.com/photo-1519681393784-d120267933ba?w=1200&h=900&fit=crop&q=85&auto=format" alt="Switzerland winter Zermatt" loading="lazy" />
+        </div>
+        <div class="trip-card__body">
+          <div class="trip-card__loc">Switzerland · Europe</div>
+          <h3 class="trip-card__name">Switzerland Christmas Circuit</h3>
+          <p class="trip-card__desc">Christmas across Zürich, Grindelwald and Zermatt, festive markets, Jungfraujoch, First cliff walk, Swiss travel pass and Lindt chocolate tour.</p>
+          <div class="trip-card__dates">
+            <span class="trip-card__dates-label">Departure 2027</span>
+            21–29 Dec
+          </div>
+          <div class="trip-card__price">From R71,600 <small>pps &nbsp;·&nbsp; Deposit R4,000</small></div>
+          <div class="trip-card__meta"><span>◷ 9 Days</span><span>◍ Group</span></div>
+          <a href="contact.html" class="btn btn-ghost">Enquire <span class="arrow">→</span></a>
+        </div>
+      </article>
+
+      <!-- 16. Phuket, Thailand -->
+      <article class="trip-card reveal" data-cat="international">
+        <div class="frame" data-label="[ PHUKET PHOTO ]">
+          <span class="trip-badge">Group Trip</span>
+          <img src="uploads/Untitled design (1).png" alt="Phuket Thailand longtail boats" loading="lazy" style="object-position: center center;" />
+        </div>
+        <div class="trip-card__body">
+          <div class="trip-card__loc">Phuket · Thailand</div>
+          <h3 class="trip-card__name">Phuket Island Escape</h3>
+          <p class="trip-card__desc">Phuket city tour, Phi Phi Islands &amp; Maya Bay, a luxury cruise and the iconic Big Buddha, 5 nights of Thai island magic.</p>
+          <div class="trip-card__dates">
+            <span class="trip-card__dates-label">Departures 2027</span>
+            26 Apr – 2 May &nbsp;·&nbsp; 26 Sep – 2 Oct
+          </div>
+          <div class="trip-card__price">From R33,000 <small>pps &nbsp;·&nbsp; Deposit R4,000</small></div>
+          <div class="trip-card__meta"><span>◷ 7 Days</span><span>◍ Group</span></div>
+          <a href="contact.html" class="btn btn-ghost">Enquire <span class="arrow">→</span></a>
+        </div>
+      </article>
+
+      <!-- 17. Phuket & Bangkok -->
+      <article class="trip-card reveal" data-d="1" data-cat="international">
+        <div class="frame" data-label="[ BANGKOK PHOTO ]">
+          <span class="trip-badge">Group Trip</span>
+          <img src="https://images.unsplash.com/photo-1508009603885-50cf7c579365?w=1200&h=900&fit=crop&q=85&auto=format" alt="Bangkok Thailand cityscape" loading="lazy" />
+        </div>
+        <div class="trip-card__body">
+          <div class="trip-card__loc">Phuket &amp; Bangkok · Thailand</div>
+          <h3 class="trip-card__name">Phuket &amp; Bangkok Explorer</h3>
+          <p class="trip-card__desc">4 nights in Phuket, Big Buddha, Phi Phi Island &amp; long tail boat tour, then 3 nights in Bangkok for the city tour and vibrant street life.</p>
+          <div class="trip-card__dates">
+            <span class="trip-card__dates-label">Departures 2027</span>
+            26 Apr – 4 May &nbsp;·&nbsp; 26 Sep – 4 Oct
+          </div>
+          <div class="trip-card__price">From R42,000 <small>pps &nbsp;·&nbsp; Deposit R4,000</small></div>
+          <div class="trip-card__meta"><span>◷ 9 Days</span><span>◍ Group</span></div>
+          <a href="contact.html" class="btn btn-ghost">Enquire <span class="arrow">→</span></a>
+        </div>
+      </article>
+
+      <!-- 18. Paris, France -->
+      <article class="trip-card reveal" data-cat="europe">
+        <div class="frame" data-label="[ PARIS PHOTO ]">
+          <span class="trip-badge">Group Trip</span>
+          <img src="https://images.unsplash.com/photo-1502602898657-3e91760cbb34?w=1200&h=900&fit=crop&q=85&auto=format" alt="Paris Eiffel Tower Seine" loading="lazy" />
+        </div>
+        <div class="trip-card__body">
+          <div class="trip-card__loc">Paris · France</div>
+          <h3 class="trip-card__name">Paris City Escape</h3>
+          <p class="trip-card__desc">Paris city tour and a romantic Seine cruise, 6 nights in the City of Light with return flights and airport transfers included.</p>
+          <div class="trip-card__dates">
+            <span class="trip-card__dates-label">Departures 2027</span>
+            31 May – 7 Jun &nbsp;·&nbsp; 9–16 Aug
+          </div>
+          <div class="trip-card__price">From R47,200 <small>pps &nbsp;·&nbsp; Deposit R4,000</small></div>
+          <div class="trip-card__meta"><span>◷ 8 Days</span><span>◍ Group</span></div>
+          <a href="contact.html" class="btn btn-ghost">Enquire <span class="arrow">→</span></a>
+        </div>
+      </article>
+
+      <!-- 19. Italy & France -->
+      <article class="trip-card reveal" data-d="1" data-cat="europe">
+        <div class="frame" data-label="[ ITALY FRANCE PHOTO ]">
+          <span class="trip-badge">Group Trip</span>
+          <img src="https://images.unsplash.com/photo-1552832230-c0197dd311b5?w=1200&h=900&fit=crop&q=85&auto=format" alt="Rome Italy Piazza Navona" loading="lazy" />
+        </div>
+        <div class="trip-card__body">
+          <div class="trip-card__loc">Italy &amp; France · Europe</div>
+          <h3 class="trip-card__name">Italy &amp; France Grand Tour</h3>
+          <p class="trip-card__desc">4 nights in Rome, Amalfi Coast, Positano &amp; Sorrento tours, then 3 nights in Paris with a city tour and Seine cruise.</p>
+          <div class="trip-card__dates">
+            <span class="trip-card__dates-label">Departures 2027</span>
+            27 May – 4 Jun &nbsp;·&nbsp; 5–13 Aug
+          </div>
+          <div class="trip-card__price">From R57,800 <small>pps &nbsp;·&nbsp; Deposit R4,000</small></div>
+          <div class="trip-card__meta"><span>◷ 9 Days</span><span>◍ Group</span></div>
+          <a href="contact.html" class="btn btn-ghost">Enquire <span class="arrow">→</span></a>
+        </div>
+      </article>
+
+      <!-- 20. France, Belgium & Netherlands -->
+      <article class="trip-card reveal" data-d="2" data-cat="europe">
+        <div class="frame" data-label="[ AMSTERDAM PHOTO ]">
+          <span class="trip-badge">Group Trip</span>
+          <img src="https://images.unsplash.com/photo-1534351590666-13e3e96b5017?w=1200&h=900&fit=crop&q=85&auto=format" alt="Amsterdam canals Netherlands" loading="lazy" />
+        </div>
+        <div class="trip-card__body">
+          <div class="trip-card__loc">France · Belgium · Netherlands</div>
+          <h3 class="trip-card__name">France, Belgium &amp; Netherlands</h3>
+          <p class="trip-card__desc">Paris Seine cruise, Brussels city tour, Amsterdam canal cruise and intercity trains, 2 nights Paris, 2 nights Belgium, 3 nights Amsterdam.</p>
+          <div class="trip-card__dates">
+            <span class="trip-card__dates-label">Departure 2027</span>
+            21–29 Oct
+          </div>
+          <div class="trip-card__price">From R53,400 <small>pps &nbsp;·&nbsp; Deposit R4,000</small></div>
+          <div class="trip-card__meta"><span>◷ 9 Days</span><span>◍ Group</span></div>
+          <a href="contact.html" class="btn btn-ghost">Enquire <span class="arrow">→</span></a>
+        </div>
+      </article>
+
+      <!-- 21. Switzerland St Moritz 2028 -->
+      <article class="trip-card reveal" data-d="3" data-cat="europe">
+        <div class="frame" data-label="[ ST MORITZ PHOTO ]">
+          <span class="trip-badge">Group Trip</span>
+          <img src="https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?w=1200&h=900&fit=crop&q=85&auto=format" alt="St Moritz Switzerland winter" loading="lazy" />
+        </div>
+        <div class="trip-card__body">
+          <div class="trip-card__loc">Switzerland · Europe</div>
+          <h3 class="trip-card__name">Switzerland Snow &amp; St Moritz</h3>
+          <p class="trip-card__desc">Zürich, Zermatt &amp; St Moritz, Swiss Travel Pass, Lindt chocolate tour, Perrier-Jouët Chukker Club polo ticket and First Class Glacier Express.</p>
+          <div class="trip-card__dates">
+            <span class="trip-card__dates-label">Departure 2028</span>
+            January 2028
+          </div>
+          <div class="trip-card__price">From R79,400 <small>pps &nbsp;·&nbsp; Deposit R4,000</small></div>
+          <div class="trip-card__meta"><span>◷ 8 Days</span><span>◍ Group</span></div>
+          <a href="contact.html" class="btn btn-ghost">Enquire <span class="arrow">→</span></a>
+        </div>
+      </article>
+
+      <!-- 22. South of France -->
+      <article class="trip-card reveal" data-d="2" data-cat="europe">
+        <div class="frame" data-label="[ SOUTH OF FRANCE PHOTO ]">
+          <span class="trip-badge">Group Trip</span>
+          <img src="https://images.unsplash.com/photo-1533105079780-92b9be482077?w=1200&h=900&fit=crop&q=85&auto=format" alt="South of France Nice coastline" loading="lazy" />
+        </div>
+        <div class="trip-card__body">
+          <div class="trip-card__loc">South of France · Europe</div>
+          <h3 class="trip-card__name">South of France Riviera</h3>
+          <p class="trip-card__desc">Nice city tour, day trips to St Tropez, Cannes &amp; Monaco, and a catamaran cruise along the glamorous French Riviera.</p>
+          <div class="trip-card__dates">
+            <span class="trip-card__dates-label">Departure 2027</span>
+            12–19 Jun
+          </div>
+          <div class="trip-card__price">From R61,800 <small>pps &nbsp;·&nbsp; Deposit R4,000</small></div>
+          <div class="trip-card__meta"><span>◷ 8 Days</span><span>◍ Group</span></div>
+          <a href="contact.html" class="btn btn-ghost">Enquire <span class="arrow">→</span></a>
+        </div>
+      </article>
+
+      <!-- 19. Finland -->
+      <article class="trip-card reveal" data-d="3" data-cat="europe">
+        <div class="frame" data-label="[ FINLAND PHOTO ]">
+          <span class="trip-badge">Group Trip</span>
+          <img src="https://images.unsplash.com/photo-1547981609-4b6bfe67ca0b?w=1200&h=900&fit=crop&q=85&auto=format" alt="Finland winter reindeer sleigh" loading="lazy" />
+        </div>
+        <div class="trip-card__body">
+          <div class="trip-card__loc">Finland · Europe</div>
+          <h3 class="trip-card__name">Finland Winter Wonderland</h3>
+          <p class="trip-card__desc">Santa Claus Village, reindeer sleigh ride, husky sled ride and Arctic snowmobiling, 4 nights of pure winter magic in Lapland.</p>
+          <div class="trip-card__dates">
+            <span class="trip-card__dates-label">Departures 2027</span>
+            16–21 Mar &nbsp;·&nbsp; 30 Nov – 5 Dec
+          </div>
+          <div class="trip-card__price">From R71,800 <small>pps &nbsp;·&nbsp; Deposit R4,000</small></div>
+          <div class="trip-card__meta"><span>◷ 6 Days</span><span>◍ Group</span></div>
+          <a href="contact.html" class="btn btn-ghost">Enquire <span class="arrow">→</span></a>
+        </div>
+      </article>
+
+      <!-- 20. F1 Grand Prix 2027 -->
+      <article class="trip-card reveal" data-cat="special">
+        <div class="frame" data-label="[ F1 GRAND PRIX PHOTO ]">
+          <span class="trip-badge trip-badge--event">Special Event</span>
+          <img src="uploads/7cc35ff6f8e65c61a175f0cca6125063.jpg" alt="Ferrari F1 cars leading at night race Grand Prix" loading="lazy" style="object-position: center 60%; height: 175px; object-fit: cover; width: 245px" />
+        </div>
+        <div class="trip-card__body">
+          <div class="trip-card__loc">Monaco · Bahrain · Abu Dhabi</div>
+          <h3 class="trip-card__name">F1 Grand Prix Travel Experience</h3>
+          <p class="trip-card__desc">From the glamour of Monaco to the lights of Bahrain and the season finale in Abu Dhabi, we're taking you closer to the world's most prestigious motorsport events.</p>
+          <div class="trip-card__dates">
+            <span class="trip-card__dates-label">Departures 2027</span>
+            Monaco · Bahrain · Abu Dhabi &nbsp;·&nbsp; DM "F1" for dates
+          </div>
+          <div class="trip-card__price">From R46,800 <small>pps &nbsp;·&nbsp; Deposit R4,000</small></div>
+          <div class="trip-card__meta"><span>◷ 6 Days</span><span>◍ Group</span></div>
+          <a href="contact.html" class="btn btn-ghost">Enquire <span class="arrow">→</span></a>
+        </div>
+      </article>
+
+      <!-- 17. MTN Bushfire 2027 -->
+      <article class="trip-card reveal" data-d="1" data-cat="special">
+        <div class="frame" data-label="[ BUSHFIRE FESTIVAL PHOTO ]">
+          <span class="trip-badge trip-badge--event">Special Event</span>
+          <img src="https://images.unsplash.com/photo-1429962714451-bb934ecdc4ec?w=1200&h=900&fit=crop&q=85&auto=format" alt="MTN Bushfire Festival" loading="lazy" />
+        </div>
+        <div class="trip-card__body">
+          <div class="trip-card__loc">Swaziland · Africa</div>
+          <h3 class="trip-card__name">MTN Bushfire 2027, Festival Glamping</h3>
+          <p class="trip-card__desc">Three nights glamping, spacious tents, hot showers, VIP flush toilets, daily breakfast, full festival ticket and return transport from JHB or DUR.</p>
+          <div class="trip-card__dates">
+            <span class="trip-card__dates-label">Departure 2027</span>
+            28–31 May 2027
+          </div>
+          <div class="trip-card__price">From R11,500 <small>pps &nbsp;·&nbsp; Deposit R1,500</small></div>
+          <div class="trip-card__meta"><span>◷ 4 Days</span><span>◍ Group</span></div>
+          <a href="contact.html" class="btn btn-ghost">Enquire <span class="arrow">→</span></a>
+        </div>
+      </article>
+
+    </div>
+  </div>
+</section>
+
+<!-- ===================== HOW IT WORKS ===================== -->
+<section class="section-pad" data-screen-label="Group Trips / How it works">
+  <div class="wrap">
+    <div class="center reveal" style="max-width:600px; margin:0 auto 64px;">
+      <span class="eyebrow center">Simple from start to finish</span>
+      <h2 class="h2" style="margin-top:16px;">How a group trip works</h2>
+    </div>
+
+    <div class="steps">
+      <div class="step reveal">
+        <div class="step__ic">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+        </div>
+        <div class="step__n">Step 01</div>
+        <h3>Enquire</h3>
+        <p>Send us a message or WhatsApp to reserve your spot on an upcoming departure.</p>
+      </div>
+      <div class="step reveal" data-d="1">
+        <div class="step__ic">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4z"/></svg>
+        </div>
+        <div class="step__n">Step 02</div>
+        <h3>We Plan</h3>
+        <p>We curate the full itinerary: stays, transfers, experiences and the finer details.</p>
+      </div>
+      <div class="step reveal" data-d="2">
+        <div class="step__ic">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+        </div>
+        <div class="step__n">Step 03</div>
+        <h3>You Confirm</h3>
+        <p>Secure your place with a deposit and join the group chat ahead of departure.</p>
+      </div>
+      <div class="step reveal" data-d="3">
+        <div class="step__ic">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M17.8 19.2 16 11l3.5-3.5C21 6 21.5 4 21 3c-1-.5-3 0-4.5 1.5L13 8 4.8 6.2c-.5-.1-.9.1-1.1.5l-.3.5c-.2.5-.1 1 .3 1.3L9 12l-2 3H4l-1 1 3 2 2 3 1-1v-3l3-2 3.5 5.3c.3.4.8.5 1.3.3l.5-.2c.4-.3.6-.7.5-1.2z"/></svg>
+        </div>
+        <div class="step__n">Step 04</div>
+        <h3>We Move</h3>
+        <p>Show up and enjoy, we handle everything from the moment you land to the way home.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== WHY TRAVEL IN A GROUP ===================== -->
+<section class="section-pad" style="background:var(--bg-2); padding-top:clamp(64px,9vw,120px);" data-screen-label="Group Trips / Why group">
+  <div class="wrap">
+    <div class="center reveal" style="max-width:620px; margin:0 auto 50px;">
+      <span class="eyebrow center">The BoineeloMove difference</span>
+      <h2 class="h2" style="margin-top:16px;">Why travel in a group</h2>
+    </div>
+    <div class="trio trio--four">
+      <div class="vcard bcard reveal">
+        <div class="bcard__ic">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+        </div>
+        <h3>Built-in community</h3>
+        <p>Travel with like-minded adventurers and leave with friendships, and a group chat, that last well beyond the trip.</p>
+      </div>
+      <div class="vcard bcard reveal" data-d="1">
+        <div class="bcard__ic">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+        </div>
+        <h3>Shared costs</h3>
+        <p>Group rates on stays, transfers and experiences make bucket-list travel more accessible than going it alone.</p>
+      </div>
+      <div class="vcard bcard reveal" data-d="2">
+        <div class="bcard__ic">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="3 11 22 2 13 21 11 13 3 11"/></svg>
+        </div>
+        <h3>Expert-guided itineraries</h3>
+        <p>Every departure is curated and led with care: the hidden gems, the right timing and the must-do experiences.</p>
+      </div>
+      <div class="vcard bcard reveal" data-d="3">
+        <div class="bcard__ic">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+        </div>
+        <h3>Stress-free planning</h3>
+        <p>We handle every booking and detail end to end. You simply show up, relax and enjoy the adventure.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== CTA BAND ===================== -->
+<section class="cta-band" data-screen-label="Group Trips / CTA">
+  <div class="cta-band__bg frame" data-label="[ DESTINATION, PHOTO ]" style="background:#16130f;">
+    <img src="uploads/gallery/49D36A5A-6BEF-490A-BF5B-D655BE6336F0-1-scaled-665fb95b.jpeg" alt="" aria-hidden="true" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center 30%;" />
+  </div>
+  <div class="wrap"><div class="cta-band__inner reveal">
+    <span class="eyebrow">Spots fill fast</span>
+    <h2 class="h2">Ready to join the group?</h2>
+    <p>Our departures often sell out. Reserve your place and we'll handle everything from there; you just bring the good vibes.</p>
+    <div style="display:flex; gap:14px; flex-wrap:wrap;">
+      <a href="contact.html" class="btn btn-gold">Enquire now <span class="arrow">→</span></a>
+      <a href="https://wa.me/27645198120" target="_blank" rel="noopener" class="btn btn-light" style="background:#25d366; box-shadow:0 10px 28px -10px rgba(37,211,102,.5);">Chat on WhatsApp</a>
+    </div>
+  </div></div>
+</section>
+
+<!-- ===================== FOOTER ===================== -->
+<footer class="footer">
+  <div class="wrap">
+    <div class="footer__top">
+      <div class="footer__brand">
+        <div class="mark">Boineelo<b>Move</b></div>
+        <p>A boutique South African tour operator crafting bucket-list group and private journeys across Africa and the world.</p>
+        <div class="footer__socials">
+          <a href="https://instagram.com/boineelomove_travel" target="_blank" rel="noopener" aria-label="Instagram"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg></a>
+          <a href="https://www.tiktok.com/@boineelomove" target="_blank" rel="noopener" aria-label="TikTok"><svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor"><path d="M16 3c.3 2 1.5 3.4 3.5 3.7v2.6c-1.3 0-2.5-.4-3.5-1v5.6a5.4 5.4 0 1 1-5.4-5.4c.3 0 .6 0 .9.1v2.7a2.7 2.7 0 1 0 1.9 2.6V3H16z"/></svg></a>
+          <a href="https://youtube.com/@Boineelomove" target="_blank" rel="noopener" aria-label="YouTube"><svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor"><path d="M22 8.2a3 3 0 0 0-2.1-2.1C18 5.6 12 5.6 12 5.6s-6 0-7.9.5A3 3 0 0 0 2 8.2 31 31 0 0 0 1.7 12 31 31 0 0 0 2 15.8a3 3 0 0 0 2.1 2.1c1.9.5 7.9.5 7.9.5s6 0 7.9-.5a3 3 0 0 0 2.1-2.1c.3-1.3.3-3.8.3-3.8s0-2.5-.3-3.8zM10 15V9l5 3-5 3z"/></svg></a>
+        </div>
+      </div>
+      <div>
+        <h4>Explore</h4>
+        <ul>
+          <li><a href="index.html">Home</a></li>
+          <li><a href="about.html">About Us</a></li>
+          <li><a href="gallery.html">Gallery</a></li>
+          <li><a href="contact.html">Contact</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Trips</h4>
+        <ul>
+          <li><a href="group-trips.html">Group Trips</a></li>
+          <li><a href="private-trips.html">Private Trips</a></li>
+          <li><a href="contact.html">Plan a Journey</a></li>
+        </ul>
+      </div>
+      <div class="footer__contact">
+        <h4>Get in touch</h4>
+        <a href="tel:+27645198120">+27 64 519 8120</a>
+        <a href="mailto:contact@boineelomove.com">contact@boineelomove.com</a>
+        <span>Sandton, GP · South Africa</span>
+        <a href="https://wa.me/27645198120" target="_blank" rel="noopener" style="color:var(--gold-deep);">Chat on WhatsApp →</a>
+      </div>
+    </div>
+    <div class="footer__bottom">
+      <span>© <span data-year>2026</span> BoineeloMove. All rights reserved.</span>
+      <span>Travel more · Break barriers · Make memories</span>
+    </div>
+  </div>
+</footer>
+
+<!-- ===================== WHATSAPP FLOAT ===================== -->
+<a class="wa" href="https://wa.me/27645198120" target="_blank" rel="noopener" aria-label="Chat on WhatsApp">
+  <svg viewBox="0 0 32 32" fill="currentColor"><path d="M16 3C9 3 3.4 8.6 3.4 15.6c0 2.4.7 4.7 1.9 6.7L3 29l6.9-2.2c1.9 1 4 1.6 6.1 1.6 7 0 12.6-5.6 12.6-12.6S23 3 16 3zm0 22.8c-1.9 0-3.7-.5-5.3-1.5l-.4-.2-4.1 1.3 1.3-4-.2-.4a10.3 10.3 0 0 1-1.6-5.6c0-5.7 4.7-10.4 10.4-10.4S26.4 9.9 26.4 15.6 21.7 25.8 16 25.8zm5.7-7.8c-.3-.2-1.8-.9-2.1-1s-.5-.2-.7.2-.8 1-1 1.2-.4.3-.7.1a8.5 8.5 0 0 1-2.5-1.5 9.4 9.4 0 0 1-1.7-2.2c-.2-.3 0-.5.1-.7l.5-.6c.2-.2.2-.3.3-.5s0-.4 0-.6-.7-1.8-1-2.4c-.3-.6-.5-.5-.7-.5h-.6c-.2 0-.6.1-.9.4-.3.3-1.2 1.2-1.2 2.9s1.2 3.4 1.4 3.6c.2.3 2.5 3.8 6 5.3.8.4 1.5.6 2 .7.8.3 1.6.2 2.2.1.7-.1 2.1-.8 2.4-1.7.3-.8.3-1.6.2-1.7-.1-.2-.3-.2-.6-.4z"/></svg>
+</a>
+
+<script src="assets/photos.js"></script>
+<script src="assets/site.js"></script>
+</body>
+</html>

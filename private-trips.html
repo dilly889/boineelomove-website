@@ -1,0 +1,743 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Private Trips | BoineeloMove</title>
+<meta name="description" content="Bespoke, fully tailored private journeys across Africa and the world. Curated by BoineeloMove for travellers who want it their way." />
+<link rel="icon" type="image/svg+xml" href="favicon.svg" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Inter:wght@400;450;500;600&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="assets/site.css" />
+<style>
+/* ============================================================
+   PRIVATE TRIPS, page-specific styles
+   More exclusive, elegant and personalised than Group Trips.
+   Builds on the shared system, no token overrides.
+   ============================================================ */
+
+/* ------- HERO: extra dim, deeper gold accents, parallax ---- */
+.pagehero.pt-hero{ min-height:72vh; background:#0f0d0a; }
+.pagehero.pt-hero::after{
+  background:
+    linear-gradient(115deg, rgba(8,7,5,.78) 0%, rgba(8,7,5,.32) 48%, rgba(8,7,5,.6) 100%),
+    linear-gradient(to top, rgba(8,7,5,.85) 0%, rgba(8,7,5,.18) 50%, rgba(8,7,5,.4) 100%);
+}
+.pt-hero__mark{
+  position:absolute; left:var(--gutter); top:140px; z-index:2;
+  display:flex; align-items:center; gap:10px;
+  color:rgba(255,255,255,.65); font-family:"SF Mono",ui-monospace,Menlo,monospace;
+  font-size:11px; letter-spacing:.22em; text-transform:uppercase;
+}
+.pt-hero__mark::before{ content:""; width:34px; height:1px; background:var(--gold); }
+.pt-hero h1{ letter-spacing:-.02em; }
+.pt-hero h1 .em{ font-style:italic; color:var(--gold-2); font-weight:400; }
+.pt-hero__meta{
+  display:flex; gap:38px; flex-wrap:wrap; margin-top:38px;
+  color:rgba(255,255,255,.75); font-size:13px; letter-spacing:.06em;
+}
+.pt-hero__meta span{ display:flex; align-items:center; gap:9px; }
+.pt-hero__meta span::before{ content:""; width:6px; height:6px; border-radius:50%; background:var(--gold); box-shadow:0 0 0 4px rgba(184,145,42,.18); }
+
+/* ------- INTRO (two-column editorial) ----- */
+.pt-intro{ display:grid; grid-template-columns:.95fr 1.05fr; gap:clamp(40px,7vw,100px); align-items:center; }
+.pt-intro .frame{ aspect-ratio:4/5; border-radius:10px; box-shadow:0 38px 70px -34px rgba(28,26,23,.45); position:relative; }
+.pt-intro .frame::after{
+  content:""; position:absolute; inset:auto -22px -22px auto;
+  width:120px; height:120px; border:1px solid var(--gold);
+  border-radius:50%; pointer-events:none;
+  background:radial-gradient(circle at 30% 30%, rgba(184,145,42,.12), transparent 70%);
+}
+.pt-intro__body h2{ margin-top:18px; }
+.pt-intro__body h2 .em{ font-style:italic; color:var(--gold-deep); }
+.pt-intro__sig{
+  margin-top:30px; padding-top:24px; border-top:1px solid var(--line-2);
+  display:flex; align-items:center; gap:14px;
+  color:var(--muted); font-size:14px;
+}
+.pt-intro__sig .swatch{ width:36px; height:36px; border-radius:50%; background:var(--gold-soft); display:grid; place-items:center; color:var(--gold-deep); font-family:var(--serif); font-style:italic; font-size:17px; }
+
+@media(max-width:860px){ .pt-intro{ grid-template-columns:1fr; } }
+
+/* ------- WHAT MAKES IT PRIVATE, feature cards ------- */
+.feat-grid{ display:grid; grid-template-columns:repeat(4,1fr); gap:22px; }
+.feat{
+  position:relative; background:var(--surface);
+  border:1px solid var(--line-2); border-radius:14px;
+  padding:34px 28px 32px; overflow:hidden;
+  transition:transform .55s var(--ease), box-shadow .55s var(--ease), border-color .55s var(--ease);
+}
+.feat::before{
+  content:""; position:absolute; left:0; top:0; height:2px; width:36px;
+  background:var(--gold); transition:width .55s var(--ease), background .55s var(--ease);
+}
+.feat:hover{
+  transform:translateY(-6px) scale(1.02);
+  border-color:rgba(201,162,75,.55);
+  box-shadow:0 30px 56px -30px rgba(28,26,23,.32);
+}
+.feat:hover::before{ width:100%; background:linear-gradient(90deg, var(--gold-2), var(--gold)); }
+.feat__ic{
+  width:54px; height:54px; border-radius:14px;
+  background:var(--gold-soft); display:grid; place-items:center;
+  color:var(--gold-deep); margin-bottom:24px;
+  transition:transform .5s var(--ease), background .5s var(--ease), color .5s var(--ease);
+}
+.feat__ic svg{ width:24px; height:24px; }
+.feat:hover .feat__ic{ background:var(--gold); color:#fff; transform:scale(1.06) rotate(-3deg); }
+.feat__n{ font-family:var(--serif); font-style:italic; color:var(--gold-deep); font-size:14px; letter-spacing:.04em; }
+.feat h3{ font-size:22px; margin:6px 0 12px; }
+.feat p{ font-size:14px; margin:0; line-height:1.6; }
+
+@media(max-width:1024px){ .feat-grid{ grid-template-columns:1fr 1fr; } }
+@media(max-width:520px){ .feat-grid{ grid-template-columns:1fr; } }
+
+/* ------- FILTER TAB BAR with sliding pill indicator ----- */
+.pt-filter-wrap{
+  display:flex; flex-direction:column; align-items:center; gap:22px;
+  margin-bottom:46px;
+}
+.pt-tabs{
+  position:relative; display:inline-flex; padding:6px;
+  border:1px solid var(--line); border-radius:50px; background:#fff;
+  box-shadow:0 1px 0 rgba(28,26,23,.02);
+}
+.pt-tabs .pt-pill{
+  position:absolute; top:6px; bottom:6px; left:6px; width:60px;
+  background:var(--gold); border-radius:50px; z-index:0;
+  box-shadow:0 4px 12px -4px rgba(184,145,42,.55);
+  transition:transform .55s var(--ease), width .55s var(--ease), background .55s var(--ease);
+}
+.pt-tabs .tab{
+  position:relative; z-index:1; border:0; background:transparent;
+  font-size:13px; font-weight:500; letter-spacing:.04em;
+  color:var(--muted); padding:10px 22px; border-radius:50px;
+  transition:color .35s var(--ease);
+}
+.pt-tabs .tab.active{ color:#fff; }
+.pt-tabs .tab:not(.active):hover{ color:var(--text); }
+
+/* experience-type pill chips */
+.exp-chips{
+  display:flex; flex-wrap:wrap; justify-content:center; gap:10px;
+  max-width:760px;
+}
+.exp-chip{
+  border:1px solid var(--line); background:#fff; color:var(--muted);
+  font-family:var(--sans); font-size:12px; font-weight:500;
+  letter-spacing:.1em; text-transform:uppercase;
+  padding:9px 18px; border-radius:50px; cursor:pointer;
+  transition:all .45s var(--ease);
+}
+.exp-chip:hover{ color:var(--text); border-color:rgba(184,145,42,.5); }
+.exp-chip.active{
+  background:linear-gradient(135deg, #d4a837 0%, #8a5e0e 100%);
+  color:#fff; border-color:transparent;
+  box-shadow:0 6px 18px -6px rgba(184,145,42,.5);
+}
+
+/* ------- TRIP CARDS, private variant ----- */
+.trip-grid--pt .trip-card{
+  border-radius:12px;
+  position:relative;
+}
+.trip-grid--pt .trip-card:hover{
+  transform:translateY(-8px) scale(1.02);
+  box-shadow:0 36px 60px -32px rgba(28,26,23,.4);
+  border-color:rgba(201,162,75,.6);
+}
+.trip-grid--pt .trip-card .frame img{
+  transition:transform 1.4s var(--ease);
+}
+.trip-grid--pt .trip-card:hover .frame img{ transform:scale(1.08); }
+.trip-grid--pt .trip-badge{
+  background:rgba(15,13,10,.85); color:var(--gold-2);
+  border:1px solid rgba(212,168,55,.4);
+}
+.trip-grid--pt .trip-badge::before{ background:var(--gold-2); }
+
+.trip-card__chips{
+  display:flex; flex-wrap:wrap; gap:6px; margin-top:-2px;
+}
+.trip-card__chips span{
+  font-size:10.5px; letter-spacing:.12em; text-transform:uppercase;
+  color:var(--gold-deep); border:1px solid rgba(184,145,42,.3);
+  padding:4px 9px; border-radius:50px; background:rgba(184,145,42,.06);
+}
+
+.trip-card__price{
+  font-family:var(--serif); font-style:italic; color:var(--gold-deep);
+  font-size:14px; margin-top:-2px;
+}
+.trip-card__price b{ font-style:normal; color:var(--text); font-weight:500; }
+
+/* layout-shift animation for filtering */
+.trip-grid--pt .trip-card{
+  transition:opacity .5s var(--ease), transform .6s var(--ease),
+             box-shadow .5s var(--ease), border-color .5s var(--ease);
+}
+.trip-grid--pt .trip-card.is-hiding{ opacity:0; transform:scale(.96) translateY(8px); }
+
+/* card image subtle parallax wrap */
+.tilt{ overflow:hidden; }
+.tilt img{ will-change:transform; }
+
+/* ---- "No matches" empty state ----- */
+.no-results{
+  display:none; text-align:center; padding:60px 20px;
+  border:1px dashed var(--line); border-radius:14px; color:var(--muted);
+}
+.no-results.show{ display:block; }
+.no-results h3{ font-size:24px; margin-bottom:8px; color:var(--text); }
+
+/* ============================================================
+   HOW IT WORKS, 4 stage tailoring process (vertical timeline)
+   ============================================================ */
+.tailor-line{ position:relative; display:grid; grid-template-columns:1fr 1fr; gap:0; max-width:1080px; margin:0 auto; }
+.tailor-line::before{
+  content:""; position:absolute; left:50%; top:0; bottom:0; width:1px;
+  background:linear-gradient(180deg, transparent 0%, var(--line) 6%, var(--line) 94%, transparent 100%);
+  transform:scaleY(0); transform-origin:top center; transition:transform 1.6s var(--ease);
+}
+.tailor-line.is-in::before{ transform:scaleY(1); }
+
+.tailor-step{ display:contents; }
+.tailor-step__num{
+  width:64px; height:64px; border-radius:50%;
+  background:#fff; border:1px solid var(--line);
+  display:grid; place-items:center; color:var(--gold-deep);
+  font-family:var(--serif); font-size:22px;
+  position:relative; z-index:2; transition:.5s var(--ease);
+  margin:0 auto;
+}
+.tailor-card{
+  background:var(--surface); border:1px solid var(--line-2);
+  border-radius:12px; padding:30px 32px; max-width:430px;
+  transition:.5s var(--ease);
+  position:relative;
+}
+.tailor-card h3{ font-size:24px; margin:0 0 8px; }
+.tailor-card p{ margin:0; font-size:14.5px; color:var(--muted); }
+.tailor-card .step-tag{
+  font-size:11px; letter-spacing:.2em; text-transform:uppercase;
+  color:var(--gold-deep); margin-bottom:10px;
+}
+
+/* alternating layout */
+.tailor-row{ display:grid; grid-template-columns:1fr 64px 1fr; align-items:center; column-gap:30px; margin-bottom:46px; }
+.tailor-row:last-child{ margin-bottom:0; }
+.tailor-row > .tailor-num-col{ display:flex; justify-content:center; }
+.tailor-row:nth-child(odd) .tailor-card{ grid-column:1; justify-self:end; text-align:right; }
+.tailor-row:nth-child(even) .tailor-card{ grid-column:3; justify-self:start; }
+.tailor-row:nth-child(odd) .tailor-card p{ margin-left:auto; }
+
+/* connecting line animation -- per-step */
+.tailor-row .tailor-num-col{ position:relative; }
+.tailor-row .tailor-num-col::after{
+  content:""; position:absolute; left:50%; top:50%;
+  width:60px; height:1px; background:var(--gold);
+  transform:translate(-50%,-50%) scaleX(0); transform-origin:center;
+  transition:transform .7s var(--ease) .2s; opacity:0;
+}
+.tailor-row:nth-child(odd) .tailor-num-col::after{ transform-origin:right; transform:translate(-100%,-50%) scaleX(0); }
+.tailor-row:nth-child(even) .tailor-num-col::after{ transform-origin:left; transform:translate(0,-50%) scaleX(0); }
+.tailor-row.in .tailor-num-col::after{ opacity:1; transform:translate(-50%,-50%) scaleX(1); }
+.tailor-row:nth-child(odd).in .tailor-num-col::after{ transform:translate(-100%,-50%) scaleX(1); }
+.tailor-row:nth-child(even).in .tailor-num-col::after{ transform:translate(0,-50%) scaleX(1); }
+
+@media (prefers-reduced-motion:no-preference){
+  .tailor-row .tailor-card,
+  .tailor-row .tailor-num-col{
+    opacity:0; transition:opacity .8s var(--ease), transform .8s var(--ease);
+  }
+  .tailor-row:nth-child(odd) .tailor-card{ transform:translateX(-30px); }
+  .tailor-row:nth-child(even) .tailor-card{ transform:translateX(30px); }
+  .tailor-row .tailor-num-col{ transform:scale(.5); }
+  .tailor-row.in .tailor-card,
+  .tailor-row.in .tailor-num-col{ opacity:1; transform:none; }
+  .tailor-row.in .tailor-num-col{ transition-delay:.18s; }
+  .tailor-row.in .tailor-card{ transition-delay:.36s; }
+}
+.tailor-row:hover .tailor-step__num{
+  background:var(--gold); color:#fff; border-color:var(--gold);
+  transform:scale(1.08); box-shadow:0 18px 36px -16px rgba(184,145,42,.5);
+}
+
+@media(max-width:760px){
+  .tailor-line::before{ left:31px; }
+  .tailor-row{ grid-template-columns:62px 1fr; row-gap:14px; column-gap:18px; margin-bottom:32px; }
+  .tailor-row:nth-child(odd) .tailor-card,
+  .tailor-row:nth-child(even) .tailor-card{ grid-column:2; justify-self:stretch; text-align:left; }
+  .tailor-row .tailor-num-col{ grid-column:1; }
+  .tailor-row .tailor-num-col::after{ display:none; }
+  .tailor-row:nth-child(odd) .tailor-card p{ margin-left:0; }
+}
+
+/* ============================================================
+   IMAGE STRIP, subtle parallax band before CTA
+   ============================================================ */
+.imgstrip{ display:grid; grid-template-columns:repeat(3,1fr); gap:14px; max-width:1480px; margin:0 auto; padding-inline:var(--gutter); }
+.imgstrip .frame{ aspect-ratio:4/5; border-radius:10px; }
+.imgstrip .frame:nth-child(2){ margin-top:48px; }
+.imgstrip .frame:nth-child(3){ margin-top:-24px; }
+.imgstrip .frame img{ will-change:transform; }
+
+@media(max-width:760px){
+  .imgstrip{ grid-template-columns:1fr 1fr; }
+  .imgstrip .frame:nth-child(3){ display:none; }
+}
+</style>
+</head>
+<body>
+
+<!-- ===================== NAV ===================== -->
+<nav class="nav">
+  <a href="index.html" class="nav__logo" aria-label="BoineeloMove home">
+    <img src="https://boineelomove.com/wp-content/uploads/2023/07/Logo-removebg-preview-1.png" alt="BoineeloMove" onerror="this.style.display='none'; this.nextElementSibling.style.display='inline';" />
+    <span class="mark" style="display:none;">Boineelo<b>Move</b></span>
+  </a>
+  <ul class="nav__links">
+    <li><a href="index.html">Home</a></li>
+    <li><a href="about.html">About</a></li>
+    <li><a href="group-trips.html">Group Trips</a></li>
+    <li><a href="private-trips.html" aria-current="page">Private Trips</a></li>
+    <li><a href="gallery.html">Gallery</a></li>
+    <li><a href="contact.html">Contact</a></li>
+  </ul>
+  <div class="nav__right">
+    <a href="contact.html" class="btn btn-gold">Enquire <span class="arrow">→</span></a>
+    <button class="nav__search" id="nav-search-btn" aria-label="Search destinations">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+    </button>
+    <button class="nav__burger" aria-label="Open menu"><span></span><span></span><span></span></button>
+  </div>
+</nav>
+
+<!-- mobile drawer -->
+<div class="drawer">
+  <button class="drawer__close" aria-label="Close menu">✕</button>
+  <a href="index.html">Home</a>
+  <a href="about.html">About</a>
+  <a href="group-trips.html">Group Trips</a>
+  <a href="private-trips.html">Private Trips</a>
+  <a href="gallery.html">Gallery</a>
+  <a href="contact.html">Contact</a>
+  <div class="drawer__contact">
+    <span>+27 64 519 8120</span>
+    <span>contact@boineelomove.com</span>
+    <span>Sandton, GP · South Africa</span>
+  </div>
+</div>
+
+<!-- ===================== PAGE HERO ===================== -->
+<header class="pagehero pt-hero" data-screen-label="Private Trips / Hero">
+  <div class="pagehero__bg frame" data-label="[ PRIVATE TRAVEL, HERO PHOTO ]" style="background:#0f0d0a;">
+    <img src="https://images.unsplash.com/photo-1571003123894-1f0594d2b5d9?w=1800&h=1100&fit=crop&q=85&auto=format" alt="" aria-hidden="true" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center 40%;" />
+  </div>
+  <div class="wrap pagehero__inner">
+    <div class="crumb reveal"><a href="index.html">Home</a> &nbsp;/&nbsp; Private Trips</div>
+    <h1 class="reveal" data-d="2">Private journeys, <br /><span class="em">tailored to you.</span></h1>
+    <p class="reveal" data-d="3">Where every detail, from the first sundowner to the last starlit transfer, is shaped around the way <em>you</em> want to travel. Couples, families, milestones and quiet escapes, designed entirely around you.</p>
+    <div class="pt-hero__meta reveal" data-d="4">
+      <span>Curated 1-on-1</span>
+      <span>Choose your dates</span>
+      <span>From 2 to 14 travellers</span>
+    </div>
+    <div class="reveal" data-d="4" style="display:flex; gap:14px; flex-wrap:wrap; margin-top:34px;">
+      <a href="contact.html" class="btn btn-gold">Begin your enquiry <span class="arrow">→</span></a>
+      <a href="#trips" class="btn btn-light" style="background:rgba(255,255,255,.1); border:1px solid rgba(255,255,255,.3); box-shadow:none;">Explore journeys</a>
+    </div>
+  </div>
+</header>
+
+<!-- ===================== INTRO (editorial split) ===================== -->
+<section class="section-pad" data-screen-label="Private Trips / Intro">
+  <div class="wrap">
+    <div class="pt-intro">
+      <div class="reveal reveal--left">
+        <div class="frame" data-label="[ PRIVATE TRIP MOMENT, PHOTO ]">
+          <img src="https://images.unsplash.com/photo-1571896349842-33c89424de2d?w=1100&h=1400&fit=crop&q=85&auto=format" alt="Luxury private travel moment" loading="lazy" />
+        </div>
+      </div>
+      <div class="pt-intro__body reveal reveal--right" data-d="1">
+        <span class="eyebrow">A journey of one</span>
+        <h2 class="h2">Travel that feels<br /><span class="em">unmistakably yours.</span></h2>
+        <p class="lead">A private trip with us is a quiet conversation that turns into a personal itinerary. We listen first, then shape every transfer, room and reservation around the way you actually want to travel, with the discretion, polish and warmth our travellers come back for.</p>
+        <p class="lead" style="margin-top:14px;">No fixed dates. No fixed group. Just one beautifully considered journey, made for you.</p>
+        <div class="pt-intro__sig">
+          <div class="swatch">B</div>
+          <div>Personally curated by Boineelo &amp; the BoineeloMove team</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== WHAT MAKES IT PRIVATE ===================== -->
+<section class="section-pad" style="background:var(--bg-2); padding-top:clamp(64px,9vw,120px);" data-screen-label="Private Trips / What makes it private">
+  <div class="wrap">
+    <div class="shead reveal">
+      <div class="shead__l">
+        <span class="eyebrow">What makes it private</span>
+        <h2 class="h2" style="margin-top:14px;">Crafted around <em style="color:var(--gold-deep);">you</em>, not a schedule.</h2>
+      </div>
+      <p class="shead__r" style="max-width:36ch;">Every private journey is curated end-to-end by our team. These are the hallmarks that set it apart.</p>
+    </div>
+
+    <div class="feat-grid">
+      <article class="feat reveal">
+        <div class="feat__ic">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+        </div>
+        <div class="feat__n">01</div>
+        <h3>One dedicated planner</h3>
+        <p>A single point of contact who knows your story, your travellers and the texture of how you like to travel.</p>
+      </article>
+
+      <article class="feat reveal" data-d="1">
+        <div class="feat__ic">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+        </div>
+        <div class="feat__n">02</div>
+        <h3>Your dates, your pace</h3>
+        <p>Travel when it suits you. We shape the rhythm of each day around your preferences and energy.</p>
+      </article>
+
+      <article class="feat reveal" data-d="2">
+        <div class="feat__ic">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+        </div>
+        <div class="feat__n">03</div>
+        <h3>Hand-picked stays</h3>
+        <p>Villas, lodges and boutique hotels chosen for character and discretion, not chains and category sheets.</p>
+      </article>
+
+      <article class="feat reveal" data-d="3">
+        <div class="feat__ic">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+        </div>
+        <div class="feat__n">04</div>
+        <h3>Insider access</h3>
+        <p>Private guides, after-hours visits and quiet tables, built from on-the-ground relationships we've spent years curating.</p>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== TESTIMONIALS ===================== -->
+<section class="section-pad" data-screen-label="Private Trips / Testimonials">
+  <div class="wrap">
+    <div class="center reveal" style="max-width:640px; margin:0 auto 54px;">
+      <span class="eyebrow center">Letters from our travellers</span>
+      <h2 class="h2" style="margin-top:16px;">Words from the journey.</h2>
+    </div>
+
+    <div class="dest-grid" style="grid-template-columns:repeat(3,1fr);">
+      <figure class="reveal" style="background:var(--surface); border:1px solid var(--line-2); border-radius:12px; padding:34px; margin:0; display:flex; flex-direction:column; gap:18px;">
+        <div style="color:var(--gold); font-family:var(--serif); font-size:50px; line-height:.4;">&ldquo;</div>
+        <blockquote style="margin:0; font-family:var(--serif); font-size:21px; line-height:1.45; color:var(--text);">Boineelo's team designed our anniversary trip down to the kind of pillows I prefer. It was deeply personal in a way I haven't felt from a travel company before.</blockquote>
+        <figcaption style="display:flex; align-items:center; gap:13px; margin-top:auto;">
+          <div class="frame is-empty" data-avatar="0" data-label="[ PHOTO ]" style="width:48px; height:48px; border-radius:50%; flex-shrink:0;"></div>
+          <div><div style="font-weight:500; font-size:14.5px;">Naledi &amp; Sipho</div><div style="font-size:12.5px; color:var(--muted);">Zanzibar Honeymoon</div></div>
+        </figcaption>
+      </figure>
+
+      <figure class="reveal" data-d="1" style="background:var(--surface); border:1px solid var(--line-2); border-radius:12px; padding:34px; margin:0; display:flex; flex-direction:column; gap:18px;">
+        <div style="color:var(--gold); font-family:var(--serif); font-size:50px; line-height:.4;">&ldquo;</div>
+        <blockquote style="margin:0; font-family:var(--serif); font-size:21px; line-height:1.45; color:var(--text);">We've worked with the big names. This was different, discreet, considered, warm. Every detail in the Sabi Sand felt hand-held without ever being heavy-handed.</blockquote>
+        <figcaption style="display:flex; align-items:center; gap:13px; margin-top:auto;">
+          <div class="frame is-empty" data-avatar="1" data-label="[ PHOTO ]" style="width:48px; height:48px; border-radius:50%; flex-shrink:0;"></div>
+          <div><div style="font-weight:500; font-size:14.5px;">The Khumalo Family</div><div style="font-size:12.5px; color:var(--muted);">Sabi Sand Private Safari</div></div>
+        </figcaption>
+      </figure>
+
+      <figure class="reveal" data-d="2" style="background:var(--surface); border:1px solid var(--line-2); border-radius:12px; padding:34px; margin:0; display:flex; flex-direction:column; gap:18px;">
+        <div style="color:var(--gold); font-family:var(--serif); font-size:50px; line-height:.4;">&ldquo;</div>
+        <blockquote style="margin:0; font-family:var(--serif); font-size:21px; line-height:1.45; color:var(--text);">A private trip the way it should be done. We didn't move a finger and still felt like the entire Cape was being introduced to us by a friend.</blockquote>
+        <figcaption style="display:flex; align-items:center; gap:13px; margin-top:auto;">
+          <div class="frame is-empty" data-avatar="3" data-label="[ PHOTO ]" style="width:48px; height:48px; border-radius:50%; flex-shrink:0;"></div>
+          <div><div style="font-weight:500; font-size:14.5px;">Amara O.</div><div style="font-size:12.5px; color:var(--muted);">Cape &amp; Winelands Retreat</div></div>
+        </figcaption>
+      </figure>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== IMAGE STRIP (subtle parallax) ===================== -->
+<section style="padding-block:clamp(40px,6vw,90px);" data-screen-label="Private Trips / Strip">
+  <div class="imgstrip" data-parallax-strip>
+    <div class="frame reveal" data-label="[ PRIVATE MOMENT, PHOTO ]">
+      <img src="https://images.unsplash.com/photo-1566073771259-6a8506099945?w=900&h=1100&fit=crop&q=85&auto=format" alt="Luxury resort infinity pool" loading="lazy" />
+    </div>
+    <div class="frame reveal" data-d="1" data-label="[ PRIVATE MOMENT, PHOTO ]">
+      <img src="https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=900&h=1100&fit=crop&q=85&auto=format" alt="Private candlelit dinner" loading="lazy" />
+    </div>
+    <div class="frame reveal" data-d="2" data-label="[ PRIVATE MOMENT, PHOTO ]">
+      <img src="https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?w=900&h=1100&fit=crop&q=85&auto=format" alt="Luxury hotel suite" loading="lazy" />
+    </div>
+  </div>
+</section>
+
+<!-- ===================== FAQ ===================== -->
+<section class="section-pad" style="background:var(--bg-2);" data-screen-label="Private Trips / FAQ">
+  <div class="wrap">
+    <div class="center reveal" style="max-width:600px; margin:0 auto 50px;">
+      <span class="eyebrow center">Frequently asked</span>
+      <h2 class="h2" style="margin-top:16px;">Before you enquire.</h2>
+    </div>
+
+    <div class="faq">
+      <div class="faq-item reveal">
+        <button class="faq-q">How private is a private trip? <span class="faq-icon" aria-hidden="true"></span></button>
+        <div class="faq-a"><p>Entirely. Your itinerary, vehicles, guides and stays are for your party only, there are no shared departures and no scheduled groups. The pace, dates and travellers are all yours.</p></div>
+      </div>
+      <div class="faq-item reveal" data-d="1">
+        <button class="faq-q">What's the typical lead time? <span class="faq-icon" aria-hidden="true"></span></button>
+        <div class="faq-a"><p>For most private journeys we recommend at least 8–12 weeks. For safari, holiday peaks and large parties we suggest 4–6 months. We can shape shorter timelines when needed, please ask.</p></div>
+      </div>
+      <div class="faq-item reveal" data-d="2">
+        <button class="faq-q">How is a private trip priced? <span class="faq-icon" aria-hidden="true"></span></button>
+        <div class="faq-a"><p>Bespoke, end-to-end. Pricing reflects the stays you choose, the experiences we curate and the party size. The starting points shown on each journey are per-traveller estimates for two travellers in our recommended stays, your proposal will be tailored from there.</p></div>
+      </div>
+      <div class="faq-item reveal" data-d="3">
+        <button class="faq-q">Can you design something not listed here? <span class="faq-icon" aria-hidden="true"></span></button>
+        <div class="faq-a"><p>Always. The trips shown here are starting points loved by our travellers. Many of our most memorable journeys begin with a blank page, tell us the moment you have in mind and we'll design around it.</p></div>
+      </div>
+      <div class="faq-item reveal" data-d="4">
+        <button class="faq-q">Do you support travel with children? <span class="faq-icon" aria-hidden="true"></span></button>
+        <div class="faq-a"><p>Yes. We specialise in family travel and routinely curate journeys for multi-generational parties, with the right stays, kids' programmes and tempo to make it joyful for everyone.</p></div>
+      </div>
+      <div class="faq-item reveal" data-d="5">
+        <button class="faq-q">What happens once we're on the trip? <span class="faq-icon" aria-hidden="true"></span></button>
+        <div class="faq-a"><p>You'll have a single dedicated contact, available throughout your journey, plus on-the-ground partners at each stop. If anything needs to shift, we move quietly and quickly in the background.</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== CTA BAND ===================== -->
+<section class="cta-band" data-screen-label="Private Trips / CTA">
+  <div class="cta-band__bg frame" data-label="[ PRIVATE TRIP HERO, PHOTO ]" style="background:#0f0d0a;">
+    <img src="https://images.unsplash.com/photo-1582719508461-905c673771fd?w=1800&h=900&fit=crop&q=85&auto=format" alt="" aria-hidden="true" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center 40%;" />
+  </div>
+  <div class="wrap"><div class="cta-band__inner reveal">
+    <span class="eyebrow">Begin your private journey</span>
+    <h2 class="h2">Let's design <em style="color:var(--gold-2); font-style:italic;">your</em> next one.</h2>
+    <p>Tell us a little about who's travelling and what you have in mind. We'll come back with a quiet, considered proposal, yours to refine.</p>
+    <div style="display:flex; gap:14px; flex-wrap:wrap;">
+      <a href="contact.html" class="btn btn-gold">Begin your enquiry <span class="arrow">→</span></a>
+      <a href="https://wa.me/27645198120" target="_blank" rel="noopener" class="btn btn-light" style="background:#25d366; box-shadow:0 10px 28px -10px rgba(37,211,102,.5);">Chat on WhatsApp</a>
+    </div>
+  </div></div>
+</section>
+
+<!-- ===================== FOOTER ===================== -->
+<footer class="footer">
+  <div class="wrap">
+    <div class="footer__top">
+      <div class="footer__brand">
+        <div class="mark">Boineelo<b>Move</b></div>
+        <p>A boutique South African tour operator crafting bucket-list group and private journeys across Africa and the world.</p>
+        <div class="footer__socials">
+          <a href="https://instagram.com/boineelomove_travel" target="_blank" rel="noopener" aria-label="Instagram"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg></a>
+          <a href="https://www.tiktok.com/@boineelomove" target="_blank" rel="noopener" aria-label="TikTok"><svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor"><path d="M16 3c.3 2 1.5 3.4 3.5 3.7v2.6c-1.3 0-2.5-.4-3.5-1v5.6a5.4 5.4 0 1 1-5.4-5.4c.3 0 .6 0 .9.1v2.7a2.7 2.7 0 1 0 1.9 2.6V3H16z"/></svg></a>
+          <a href="https://youtube.com/@Boineelomove" target="_blank" rel="noopener" aria-label="YouTube"><svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor"><path d="M22 8.2a3 3 0 0 0-2.1-2.1C18 5.6 12 5.6 12 5.6s-6 0-7.9.5A3 3 0 0 0 2 8.2 31 31 0 0 0 1.7 12 31 31 0 0 0 2 15.8a3 3 0 0 0 2.1 2.1c1.9.5 7.9.5 7.9.5s6 0 7.9-.5a3 3 0 0 0 2.1-2.1c.3-1.3.3-3.8.3-3.8s0-2.5-.3-3.8zM10 15V9l5 3-5 3z"/></svg></a>
+        </div>
+      </div>
+      <div>
+        <h4>Explore</h4>
+        <ul>
+          <li><a href="index.html">Home</a></li>
+          <li><a href="about.html">About Us</a></li>
+          <li><a href="gallery.html">Gallery</a></li>
+          <li><a href="contact.html">Contact</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Trips</h4>
+        <ul>
+          <li><a href="group-trips.html">Group Trips</a></li>
+          <li><a href="private-trips.html">Private Trips</a></li>
+          <li><a href="contact.html">Plan a Journey</a></li>
+        </ul>
+      </div>
+      <div class="footer__contact">
+        <h4>Get in touch</h4>
+        <a href="tel:+27645198120">+27 64 519 8120</a>
+        <a href="mailto:contact@boineelomove.com">contact@boineelomove.com</a>
+        <span>Sandton, GP · South Africa</span>
+        <a href="https://wa.me/27645198120" target="_blank" rel="noopener" style="color:var(--gold-deep);">Chat on WhatsApp →</a>
+      </div>
+    </div>
+    <div class="footer__bottom">
+      <span>© <span data-year>2026</span> BoineeloMove. All rights reserved.</span>
+      <span>Travel more · Break barriers · Make memories</span>
+    </div>
+  </div>
+</footer>
+
+<!-- ===================== WHATSAPP FLOAT ===================== -->
+<a class="wa" href="https://wa.me/27645198120" target="_blank" rel="noopener" aria-label="Chat on WhatsApp">
+  <svg viewBox="0 0 32 32" fill="currentColor"><path d="M16 3C9 3 3.4 8.6 3.4 15.6c0 2.4.7 4.7 1.9 6.7L3 29l6.9-2.2c1.9 1 4 1.6 6.1 1.6 7 0 12.6-5.6 12.6-12.6S23 3 16 3zm0 22.8c-1.9 0-3.7-.5-5.3-1.5l-.4-.2-4.1 1.3 1.3-4-.2-.4a10.3 10.3 0 0 1-1.6-5.6c0-5.7 4.7-10.4 10.4-10.4S26.4 9.9 26.4 15.6 21.7 25.8 16 25.8zm5.7-7.8c-.3-.2-1.8-.9-2.1-1s-.5-.2-.7.2-.8 1-1 1.2-.4.3-.7.1a8.5 8.5 0 0 1-2.5-1.5 9.4 9.4 0 0 1-1.7-2.2c-.2-.3 0-.5.1-.7l.5-.6c.2-.2.2-.3.3-.5s0-.4 0-.6-.7-1.8-1-2.4c-.3-.6-.5-.5-.7-.5h-.6c-.2 0-.6.1-.9.4-.3.3-1.2 1.2-1.2 2.9s1.2 3.4 1.4 3.6c.2.3 2.5 3.8 6 5.3.8.4 1.5.6 2 .7.8.3 1.6.2 2.2.1.7-.1 2.1-.8 2.4-1.7.3-.8.3-1.6.2-1.7-.1-.2-.3-.2-.6-.4z"/></svg>
+</a>
+
+<script src="assets/photos.js"></script>
+<script src="assets/site.js"></script>
+
+<!-- ===================== PRIVATE-TRIPS PAGE LOGIC ===================== -->
+<script>
+(function(){
+  "use strict";
+
+  /* ---------- FILTER: region tabs (sliding pill) + experience chips ---------- */
+  var tabsEl  = document.querySelector('[data-pt-tabs]');
+  var pillEl  = document.querySelector('[data-pt-pill]');
+  var chipsEl = document.querySelector('[data-exp-chips]');
+  var grid    = document.querySelector('[data-pt-grid]');
+  var empty   = document.getElementById('pt-empty');
+
+  if(!grid) return;
+
+  var state = { region:'all', exp:'all' };
+
+  /* sliding pill: position to active tab */
+  function movePill(){
+    if(!tabsEl || !pillEl) return;
+    var active = tabsEl.querySelector('.tab.active');
+    if(!active) return;
+    var t = tabsEl.getBoundingClientRect();
+    var a = active.getBoundingClientRect();
+    pillEl.style.transform = 'translateX(' + (a.left - t.left - 6) + 'px)';
+    pillEl.style.width = a.width + 'px';
+  }
+  window.addEventListener('resize', movePill);
+  window.addEventListener('load', movePill);
+  setTimeout(movePill, 60);
+  setTimeout(movePill, 300);
+
+  /* card filtering with smooth layout shift */
+  var cards = Array.prototype.slice.call(grid.querySelectorAll('.trip-card'));
+
+  function matches(card){
+    var r = card.getAttribute('data-region') || '';
+    var e = (card.getAttribute('data-exp') || '').split(/\s+/);
+    var okR = state.region === 'all' || r === state.region;
+    var okE = state.exp === 'all' || e.indexOf(state.exp) !== -1;
+    return okR && okE;
+  }
+
+  function applyFilter(){
+    var anyVisible = false;
+    cards.forEach(function(c){ c.classList.add('is-hiding'); });
+
+    // brief delay so the fade-out reads as motion, then layout-shift the visible set
+    setTimeout(function(){
+      cards.forEach(function(c){
+        if(matches(c)){
+          c.style.display = '';
+          anyVisible = true;
+        } else {
+          c.style.display = 'none';
+        }
+      });
+      // re-trigger fade-in
+      requestAnimationFrame(function(){
+        cards.forEach(function(c){ c.classList.remove('is-hiding'); });
+      });
+      if(empty) empty.classList.toggle('show', !anyVisible);
+    }, 240);
+  }
+
+  if(tabsEl){
+    tabsEl.querySelectorAll('.tab').forEach(function(tab){
+      tab.addEventListener('click', function(){
+        tabsEl.querySelectorAll('.tab').forEach(function(t){ t.classList.remove('active'); });
+        tab.classList.add('active');
+        state.region = tab.getAttribute('data-region');
+        movePill();
+        applyFilter();
+      });
+    });
+  }
+  if(chipsEl){
+    chipsEl.querySelectorAll('.exp-chip').forEach(function(chip){
+      chip.addEventListener('click', function(){
+        chipsEl.querySelectorAll('.exp-chip').forEach(function(c){ c.classList.remove('active'); });
+        chip.classList.add('active');
+        state.exp = chip.getAttribute('data-exp');
+        applyFilter();
+      });
+    });
+  }
+
+  /* ---------- TAILORING TIMELINE, staggered step reveal ---------- */
+  var tline = document.querySelector('[data-tailor-line]');
+  var rows  = Array.prototype.slice.call(document.querySelectorAll('[data-tailor-row]'));
+  function checkTimeline(){
+    if(tline){
+      var r = tline.getBoundingClientRect();
+      var vh = window.innerHeight;
+      if(r.top < vh * 0.85 && r.bottom > 0) tline.classList.add('is-in');
+    }
+    rows.forEach(function(row, i){
+      var rr = row.getBoundingClientRect();
+      if(rr.top < window.innerHeight * 0.88 && rr.bottom > 0){
+        // stagger by index so each row settles slightly after the previous
+        if(!row.classList.contains('in')){
+          setTimeout(function(){ row.classList.add('in'); }, i * 80);
+        }
+      }
+    });
+  }
+  window.addEventListener('scroll', checkTimeline, {passive:true});
+  window.addEventListener('resize', checkTimeline);
+  checkTimeline();
+  setTimeout(checkTimeline, 300);
+
+  /* ---------- CARD IMAGE PARALLAX, subtle depth on tilt images ---------- */
+  var tilts = Array.prototype.slice.call(document.querySelectorAll('.trip-grid--pt .tilt img'));
+  function tiltScroll(){
+    var vh = window.innerHeight;
+    tilts.forEach(function(img){
+      var rect = img.getBoundingClientRect();
+      if(rect.bottom < 0 || rect.top > vh) return;
+      // 0 at top of viewport, 1 at bottom
+      var p = (rect.top + rect.height/2) / vh;
+      var ty = (p - 0.5) * 14; // -7..+7 px subtle drift
+      img.style.transform = 'translate3d(0,' + ty + 'px,0) scale(1.04)';
+    });
+  }
+  window.addEventListener('scroll', tiltScroll, {passive:true});
+  window.addEventListener('resize', tiltScroll);
+  tiltScroll();
+
+  /* ---------- IMAGE STRIP, gentle parallax ---------- */
+  var stripImgs = Array.prototype.slice.call(document.querySelectorAll('[data-parallax-strip] .frame img'));
+  function stripScroll(){
+    var vh = window.innerHeight;
+    stripImgs.forEach(function(img, i){
+      var rect = img.getBoundingClientRect();
+      if(rect.bottom < 0 || rect.top > vh) return;
+      var p = (rect.top + rect.height/2) / vh;
+      var k = [0.10, 0.16, 0.08][i % 3]; // varied subtle rates
+      var ty = (0.5 - p) * 60 * k * 10;
+      img.style.transform = 'translate3d(0,' + ty + 'px,0)';
+    });
+  }
+  window.addEventListener('scroll', stripScroll, {passive:true});
+  window.addEventListener('resize', stripScroll);
+  stripScroll();
+
+  /* ---------- HERO PARALLAX (page hero img), slightly stronger than default ---------- */
+  var heroImg = document.querySelector('.pt-hero .pagehero__bg img');
+  if(heroImg){
+    window.addEventListener('scroll', function(){
+      heroImg.style.transform = 'translateY(' + (window.scrollY * 0.22) + 'px) scale(1.05)';
+    }, {passive:true});
+    heroImg.style.transform = 'scale(1.05)';
+  }
+})();
+</script>
+</body>
+</html>

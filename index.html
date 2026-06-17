@@ -1,0 +1,843 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>BoineeloMove: Luxury Travel & Bucket-List Journeys</title>
+<meta name="description" content="BoineeloMove is a boutique South African tour operator crafting cinematic group and private journeys across Africa and the world." />
+<link rel="icon" type="image/svg+xml" href="favicon.svg" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Inter:wght@400;450;500;600&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="assets/site.css" />
+<style>
+/* ---------------- HERO (home only) ---------------- */
+.hero{ position:relative; height:100svh; min-height:640px; overflow:hidden; }
+.hero__slides{ position:absolute; inset:0; }
+.hslide{ position:absolute; inset:0; opacity:0; visibility:hidden; transition:opacity 1.3s var(--ease), visibility 1.3s; }
+.hslide.active{ opacity:1; visibility:visible; }
+.hslide__bg{
+  position:absolute; inset:0; transform:scale(1.04);
+  background-image:
+    repeating-linear-gradient(125deg, rgba(255,255,255,.018) 0 13px, transparent 13px 26px),
+    radial-gradient(130% 110% at 72% 18%, var(--g1) 0%, var(--g2) 62%, #0b0b0c 100%);
+}
+.hslide.active .hslide__bg{ animation:kenburns 7s var(--ease) forwards; }
+.hslide__photo{ position:absolute; inset:0; width:100%; height:100%; object-fit:cover; }
+@keyframes kenburns{ from{ transform:scale(1.12) translate(2%, -1%);} to{ transform:scale(1.0) translate(0,0);} }
+.hslide::after{ content:""; position:absolute; inset:0;
+  background:linear-gradient(90deg, rgba(7,7,8,.82) 0%, rgba(7,7,8,.42) 38%, transparent 66%),
+             linear-gradient(to top, rgba(7,7,8,.7) 0%, transparent 42%); }
+.hslide__note{ position:absolute; left:var(--gutter); bottom:104px; z-index:3; font-family:"SF Mono",ui-monospace,Menlo,monospace; font-size:10.5px; letter-spacing:.16em; text-transform:uppercase; color:rgba(255,255,255,.32); }
+.hslide__note::before{ content:"◦ "; color:var(--gold); }
+
+.hero__content{ position:absolute; inset:0; z-index:4; display:flex; align-items:center; pointer-events:none; }
+.htext{ max-width:660px; }
+.hslide .htext > *{ opacity:1; transform:none; }
+@media (prefers-reduced-motion:no-preference){
+  .hslide.active .htext > *{ opacity:0; transform:translateY(26px); animation:hrise .9s var(--ease) forwards; }
+  .hslide.active .htext > *:nth-child(1){ animation-delay:.35s; }
+  .hslide.active .htext > *:nth-child(2){ animation-delay:.48s; }
+  .hslide.active .htext > *:nth-child(3){ animation-delay:.62s; }
+  .hslide.active .htext > *:nth-child(4){ animation-delay:.78s; }
+}
+@keyframes hrise{ from{ opacity:0; transform:translateY(26px);} to{ opacity:1; transform:none; } }
+.hero .eyebrow{ color:var(--gold-2); }
+.htext h1{ font-size:clamp(56px,9.5vw,138px); line-height:.94; margin:10px 0 18px; color:#fff; }
+.htext .region{ color:var(--gold); }
+.htext p{ font-size:clamp(16px,1.5vw,19px); color:#e2ddd3; max-width:46ch; margin-bottom:30px; }
+.htext .btn{ pointer-events:auto; }
+
+/* preview cards */
+.hero__rail{ position:absolute; right:var(--gutter); top:50%; transform:translateY(-50%); z-index:5; display:flex; flex-direction:column; gap:16px; width:230px; }
+.hero__rail-label{ font-size:11px; letter-spacing:.24em; text-transform:uppercase; color:rgba(255,255,255,.5); margin-bottom:2px; }
+.hpreview{ position:relative; height:128px; border-radius:8px; overflow:hidden; cursor:pointer; border:1px solid rgba(255,255,255,.14); transition:transform .5s var(--ease), border-color .5s; }
+.hpreview:hover{ transform:scale(1.03); border-color:var(--gold); }
+.hpreview .frame{ position:absolute; inset:0; }
+.hpreview::after{ content:""; position:absolute; inset:0; background:linear-gradient(to top, rgba(8,8,9,.85), transparent 70%); }
+.hpreview__body{ position:absolute; left:14px; bottom:12px; z-index:2; }
+.hpreview__tag{ font-size:10px; letter-spacing:.16em; text-transform:uppercase; color:var(--gold-2); }
+.hpreview__name{ font-family:var(--serif); font-size:21px; line-height:1; margin-top:3px; color:#fff; }
+.hpreview.pop{ animation:pop .6s var(--ease); }
+@keyframes pop{ from{ opacity:.2; transform:translateX(16px) scale(.97);} to{ opacity:1; transform:none;} }
+
+/* hero controls */
+.hero__nav{ position:absolute; left:var(--gutter); bottom:42px; z-index:6; display:flex; align-items:center; gap:22px; }
+.hdots{ display:flex; gap:9px; }
+.hdot{ width:30px; height:3px; border-radius:3px; border:0; background:rgba(255,255,255,.25); cursor:pointer; transition:.4s var(--ease); padding:0; }
+.hdot.active{ background:var(--gold); width:46px; }
+.harrows{ display:flex; gap:8px; }
+.harrow{ width:46px; height:46px; border-radius:50%; border:1px solid rgba(255,255,255,.22); background:rgba(255,255,255,.04); color:#fff; display:grid; place-items:center; transition:.35s var(--ease); }
+.harrow:hover{ background:var(--gold); border-color:var(--gold); color:#0c0c0d; }
+.hscroll{ position:absolute; right:var(--gutter); bottom:46px; z-index:6; writing-mode:vertical-rl; font-size:11px; letter-spacing:.2em; text-transform:uppercase; color:rgba(255,255,255,.5); display:flex; align-items:center; gap:14px; }
+.hscroll::after{ content:""; width:1px; height:46px; background:linear-gradient(var(--gold),transparent); }
+
+@media (max-width:900px){
+  .hero__rail{ display:none; }
+  .hscroll{ display:none; }
+}
+
+/* ---------------- intro ---------------- */
+.intro{ display:grid; grid-template-columns:1fr 1fr; gap:clamp(32px,6vw,90px); align-items:center; }
+.intro__big{ font-size:clamp(30px,3.6vw,46px); line-height:1.18; }
+.intro__big .gold{ color:var(--gold); font-style:italic; }
+
+/* split */
+.split{ display:grid; grid-template-columns:1fr 1fr; gap:22px; }
+.split__panel{ position:relative; border-radius:8px; overflow:hidden; min-height:440px; display:flex; align-items:flex-end; padding:clamp(28px,3.5vw,46px); }
+.split__panel .frame{ position:absolute; inset:0; }
+.split__panel .frame img{ transition:transform 1.1s var(--ease); }
+.split__panel:hover .frame img{ transform:scale(1.05); }
+.split__panel::after{ content:""; position:absolute; inset:0; background:linear-gradient(to top, rgba(8,8,9,.9) 0%, rgba(8,8,9,.25) 60%, rgba(8,8,9,.4) 100%); }
+.split__body{ position:relative; z-index:2; max-width:38ch; }
+.split__body .eyebrow{ margin-bottom:14px; color:var(--gold-2); }
+.split__body h3{ margin-bottom:12px; color:#fff; }
+.split__body p{ font-size:14.5px; margin-bottom:20px; color:rgba(255,255,255,.85); }
+
+/* section heading helper */
+.shead{ display:flex; justify-content:space-between; align-items:flex-end; gap:30px; margin-bottom:46px; flex-wrap:wrap; }
+.shead__l{ max-width:34ch; }
+.shead .eyebrow{ margin-bottom:16px; }
+.shead p{ font-size:15px; margin:0; }
+
+/* insta banner */
+.insta{ position:relative; overflow:hidden; text-align:center; padding-block:clamp(70px,10vw,120px); }
+.insta__bg{ position:absolute; inset:0; background:radial-gradient(120% 130% at 50% 0%, #ffffff 0%, var(--bg-2) 60%); }
+.insta .wrap{ position:relative; z-index:2; }
+
+/* Why us, clean white section */
+[data-screen-label="Home / Why us"]{
+  background:#ffffff !important;
+}
+
+/* Stats row */
+.stats-row{
+  display:grid;
+  grid-template-columns: 1fr auto 1fr auto 1fr auto 1fr;
+  align-items:center;
+  gap:0;
+  max-width:860px;
+  margin:0 auto 80px;
+  padding:48px 40px;
+  background:#fff;
+  border:1px solid rgba(28,26,23,.08);
+  border-radius:4px;
+  box-shadow:0 8px 48px -16px rgba(28,26,23,.08);
+}
+.stat-item{
+  text-align:center;
+  padding:8px 24px;
+  transition:transform .3s ease;
+}
+.stat-item:hover{ transform:translateY(-3px); }
+.stat-num{
+  font-family:var(--serif);
+  font-size:clamp(2.4rem,4vw,3.6rem);
+  font-weight:400;
+  line-height:1;
+  color:var(--text);
+  letter-spacing:-.02em;
+}
+.stat-plus{
+  font-size:.6em;
+  color:var(--gold);
+  vertical-align:super;
+  line-height:0;
+}
+.stat-label{
+  margin-top:10px;
+  font-size:.72rem;
+  letter-spacing:.12em;
+  text-transform:uppercase;
+  color:var(--muted);
+  font-weight:500;
+}
+.stat-divider{
+  width:1px;
+  height:52px;
+  background:linear-gradient(to bottom, transparent, rgba(28,26,23,.14), transparent);
+}
+@media(max-width:640px){
+  .stats-row{
+    grid-template-columns:1fr 1fr;
+    gap:0;
+    padding:32px 24px;
+  }
+  .stat-divider{ display:none; }
+  .stat-item{
+    padding:24px 16px;
+    border-bottom:1px solid rgba(28,26,23,.07);
+  }
+  .stat-item:nth-child(odd){ border-right:1px solid rgba(28,26,23,.07); }
+  .stat-item:nth-last-child(-n+2){ border-bottom:none; }
+}
+</style>
+</head>
+<body>
+
+<!-- ===================== NAV ===================== -->
+<nav class="nav" data-screen-label="Home / Nav">
+  <a href="index.html" class="nav__logo" aria-label="BoineeloMove home">
+    <img src="https://boineelomove.com/wp-content/uploads/2023/07/Logo-removebg-preview-1.png" alt="BoineeloMove" onerror="this.style.display='none'; this.nextElementSibling.style.display='inline';" />
+    <span class="mark" style="display:none;">Boineelo<b>Move</b></span>
+  </a>
+  <ul class="nav__links">
+    <li><a href="index.html" aria-current="page">Home</a></li>
+    <li><a href="about.html">About</a></li>
+    <li><a href="group-trips.html">Group Trips</a></li>
+    <li><a href="private-trips.html">Private Trips</a></li>
+    <li><a href="gallery.html">Gallery</a></li>
+    <li><a href="contact.html">Contact</a></li>
+  </ul>
+  <div class="nav__right">
+    <a href="contact.html" class="btn btn-gold">Enquire <span class="arrow">→</span></a>
+    <button class="nav__search" id="nav-search-btn" aria-label="Search destinations">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+    </button>
+    <button class="nav__burger" aria-label="Open menu"><span></span><span></span><span></span></button>
+  </div>
+</nav>
+
+<!-- mobile drawer -->
+<div class="drawer">
+  <button class="drawer__close" aria-label="Close menu">✕</button>
+  <a href="index.html">Home</a>
+  <a href="about.html">About</a>
+  <a href="group-trips.html">Group Trips</a>
+  <a href="private-trips.html">Private Trips</a>
+  <a href="gallery.html">Gallery</a>
+  <a href="contact.html">Contact</a>
+  <div class="drawer__contact">
+    <span>+27 64 519 8120</span>
+    <span>contact@boineelomove.com</span>
+    <span>Sandton, GP · South Africa</span>
+  </div>
+</div>
+
+<!-- ===================== HERO ===================== -->
+<section class="hero" data-hero data-screen-label="Home / Hero slideshow">
+  <div class="hero__slides">
+    <div class="hslide active" data-name="Cape Town" data-photo="cape-town" data-region="South Africa · Africa" style="--g1:#16403f; --g2:#1a1410;">
+      <div class="hslide__bg"></div>
+            <div class="hero__content"><div class="wrap" style="width:100%;"><div class="htext">
+        <span class="eyebrow">Bucket-list journeys</span>
+        <h1 class="display">Cape Town</h1>
+        <p>Sundowners over the Atlantic, Table Mountain mornings and Cape Winelands afternoons, where it all began.</p>
+        <a href="contact.html" class="btn btn-gold">Enquire about Cape Town <span class="arrow">→</span></a>
+      </div></div></div>
+    </div>
+    <div class="hslide" data-name="Zanzibar" data-photo="zanzibar" data-img-pos="center center" data-region="Tanzania · Africa" style="--g1:#0f3a47; --g2:#211a11;">
+      <div class="hslide__bg"></div>
+            <div class="hero__content"><div class="wrap" style="width:100%;"><div class="htext">
+        <span class="eyebrow">Bucket-list journeys</span>
+        <h1 class="display">Zanzibar</h1>
+        <p>Spice markets, turquoise shallows and barefoot luxury on Tanzania's legendary Spice Island.</p>
+        <a href="contact.html" class="btn btn-gold">Enquire about Zanzibar <span class="arrow">→</span></a>
+      </div></div></div>
+    </div>
+    <div class="hslide" data-name="Dubai" data-photo="dubai" data-region="UAE · International" style="--g1:#3a2a12; --g2:#13110d;">
+      <div class="hslide__bg"></div>
+            <div class="hero__content"><div class="wrap" style="width:100%;"><div class="htext">
+        <span class="eyebrow">Bucket-list journeys</span>
+        <h1 class="display">Dubai</h1>
+        <p>Skyline suites, golden-hour desert safaris and effortless fine dining, tailored entirely to you.</p>
+        <a href="contact.html" class="btn btn-gold">Enquire about Dubai <span class="arrow">→</span></a>
+      </div></div></div>
+    </div>
+    <div class="hslide" data-name="Maldives" data-photo="maldives" data-region="Indian Ocean · International" style="--g1:#0c3148; --g2:#15120f;">
+      <div class="hslide__bg"></div>
+            <div class="hero__content"><div class="wrap" style="width:100%;"><div class="htext">
+        <span class="eyebrow">Bucket-list journeys</span>
+        <h1 class="display">Maldives</h1>
+        <p>Overwater villas, glass-clear lagoons and reefs that feel like another world entirely.</p>
+        <a href="contact.html" class="btn btn-gold">Enquire about Maldives <span class="arrow">→</span></a>
+      </div></div></div>
+    </div>
+    <div class="hslide" data-name="Morocco" data-photo="morocco" data-region="North Africa · Africa" style="--g1:#3d2013; --g2:#17110e;">
+      <div class="hslide__bg"></div>
+            <div class="hero__content"><div class="wrap" style="width:100%;"><div class="htext">
+        <span class="eyebrow">Bucket-list journeys</span>
+        <h1 class="display">Morocco</h1>
+        <p>Marrakech medinas, riads at dusk and a night beneath the stars in the Sahara.</p>
+        <a href="contact.html" class="btn btn-gold">Enquire about Morocco <span class="arrow">→</span></a>
+      </div></div></div>
+    </div>
+    <div class="hslide" data-name="Bali" data-photo="bali" data-region="Indonesia · International" style="--g1:#163a24; --g2:#14120e;">
+      <div class="hslide__bg"></div>
+            <div class="hero__content"><div class="wrap" style="width:100%;"><div class="htext">
+        <span class="eyebrow">Bucket-list journeys</span>
+        <h1 class="display">Bali</h1>
+        <p>Rice-terrace villas, temple mornings and slow, soulful days designed around you.</p>
+        <a href="contact.html" class="btn btn-gold">Enquire about Bali <span class="arrow">→</span></a>
+      </div></div></div>
+    </div>
+  </div>
+
+  <!-- right rail preview cards -->
+  <aside class="hero__rail">
+    <div class="hero__rail-label">Upcoming destinations</div>
+    <article class="hpreview"><div class="frame is-empty" data-label="[ PHOTO ]"></div><div class="hpreview__body"><div class="hpreview__tag"></div><div class="hpreview__name"></div></div></article>
+    <article class="hpreview"><div class="frame is-empty" data-label="[ PHOTO ]"></div><div class="hpreview__body"><div class="hpreview__tag"></div><div class="hpreview__name"></div></div></article>
+    <article class="hpreview"><div class="frame is-empty" data-label="[ PHOTO ]"></div><div class="hpreview__body"><div class="hpreview__tag"></div><div class="hpreview__name"></div></div></article>
+  </aside>
+
+  <div class="hero__nav">
+    <div class="harrows">
+      <button class="harrow" data-hprev aria-label="Previous">←</button>
+      <button class="harrow" data-hnext aria-label="Next">→</button>
+    </div>
+    <div class="hdots">
+      <button class="hdot active" aria-label="Slide 1"></button>
+      <button class="hdot" aria-label="Slide 2"></button>
+      <button class="hdot" aria-label="Slide 3"></button>
+      <button class="hdot" aria-label="Slide 4"></button>
+      <button class="hdot" aria-label="Slide 5"></button>
+      <button class="hdot" aria-label="Slide 6"></button>
+    </div>
+  </div>
+
+</section>
+
+<!-- ===================== INTRO ===================== -->
+<section class="section-pad" data-screen-label="Home / Intro">
+  <div class="wrap">
+    <div class="intro">
+      <div class="reveal">
+        <span class="eyebrow">Who we are</span>
+        <p class="intro__big serif" style="margin-top:20px;">Travel is more than visiting unfamiliar places, it's creating meaningful experiences and memories to last a lifetime.</p>
+      </div>
+      <div class="reveal" data-d="1">
+        <p class="lead">At BoineeloMove we encourage everyone to adventure more, breaking barriers and making travel exciting and stress-free with our bucket-list experiences. Every itinerary is carefully curated and customised, whether you're travelling as a group, solo, family or couple.</p>
+        <a href="about.html" class="link-gold">Get to know us <span class="arrow">→</span></a>
+      </div>
+    </div>
+
+
+  </div>
+</section>
+
+<!-- ===================== FEATURED DESTINATIONS ===================== -->
+<section class="section-pad" style="padding-top:0;" data-screen-label="Home / Destinations">
+  <div class="wrap">
+    <div class="shead reveal">
+      <div class="shead__l">
+        <span class="eyebrow">Where we go</span>
+        <h2 class="h2" style="margin-top:16px;">Discover the world,<br />curated by BoineeloMove</h2>
+      </div>
+      <div class="tabs" data-filter-group data-filter-target="#dest-grid">
+        <button class="tab active" data-filter="all">All</button>
+        <button class="tab" data-filter="africa">Africa</button>
+        <button class="tab" data-filter="international">International</button>
+      </div>
+    </div>
+
+    <div class="dest-grid" id="dest-grid">
+      <article class="dest-card reveal" data-cat="africa">
+        <div class="frame" data-label="[ CAPE TOWN PHOTO ]"><img src="uploads/gallery/IMG_4542-e18c4a1c.jpeg" alt="Cape Town" loading="lazy" style="object-position:center 25%;" /></div>
+        <div class="dest-card__body"><div class="dest-card__tag">South Africa</div><h3 class="dest-card__name">Cape Town</h3><div class="dest-card__meta">Table Mountain · Winelands · Coastline</div></div>
+      </article>
+      <article class="dest-card reveal" data-d="1" data-cat="africa">
+        <div class="frame" data-label="[ ZANZIBAR PHOTO ]"><img src="uploads/gallery/091BEC7F-A0DA-4F9F-ABEC-3507333D005E-scaled-748a3996.jpeg" alt="Zanzibar" loading="lazy" style="object-position:center 30%;" /></div>
+        <div class="dest-card__body"><div class="dest-card__tag">Tanzania</div><h3 class="dest-card__name">Zanzibar</h3><div class="dest-card__meta">Spice Island · Turquoise water</div></div>
+      </article>
+      <article class="dest-card reveal" data-d="2" data-cat="international">
+        <div class="frame" data-label="[ DUBAI PHOTO ]"><img src="uploads/gallery/994183BC-8665-4715-B5C9-4E8F06BF5829-scaled-ebff25d7.jpeg" alt="Dubai" loading="lazy" style="object-position:center 20%;" /></div>
+        <div class="dest-card__body"><div class="dest-card__tag">United Arab Emirates</div><h3 class="dest-card__name">Dubai</h3><div class="dest-card__meta">Skyline · Desert · Luxury</div></div>
+      </article>
+      <article class="dest-card reveal" data-cat="africa">
+        <div class="frame" data-label="[ MOROCCO PHOTO ]"><img src="uploads/gallery/IMG_9918-2b1c25f7.jpeg" alt="Morocco" loading="lazy" style="object-position:center center;" /></div>
+        <div class="dest-card__body"><div class="dest-card__tag">North Africa</div><h3 class="dest-card__name">Morocco</h3><div class="dest-card__meta">Marrakech · Sahara · Medinas</div></div>
+      </article>
+      <article class="dest-card reveal" data-d="1" data-cat="international">
+        <div class="frame" data-label="[ MALDIVES PHOTO ]"><img src="uploads/gallery/AEB383AE-4610-4B8A-ADC6-8D38D64DE032-scaled-48bcc1dc.jpeg" alt="Maldives overwater villa" loading="lazy" style="object-position:center 25%;" /></div>
+        <div class="dest-card__body"><div class="dest-card__tag">Indian Ocean</div><h3 class="dest-card__name">Maldives</h3><div class="dest-card__meta">Overwater villas · Reefs</div></div>
+      </article>
+      <article class="dest-card reveal" data-d="2" data-cat="international">
+        <div class="frame" data-label="[ BALI PHOTO ]"><img src="uploads/gallery/AEF29701-4D41-4B6B-BF57-23E3CC5CEA85-scaled-bf1a364e.jpeg" alt="Bali" loading="lazy" style="object-position:center 20%;" /></div>
+        <div class="dest-card__body"><div class="dest-card__tag">Indonesia</div><h3 class="dest-card__name">Bali</h3><div class="dest-card__meta">Temples · Rice terraces · Beaches</div></div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== POPULAR TRIPS ===================== -->
+<section class="section-pad" style="background:var(--bg-2); padding-top:clamp(64px,9vw,120px);" data-screen-label="Home / Popular trips">
+  <div class="wrap">
+    <div class="shead reveal">
+      <div class="shead__l">
+        <span class="eyebrow">Curated journeys</span>
+        <h2 class="h2" style="margin-top:16px;">Our most-loved trips</h2>
+      </div>
+      <div style="display:flex; align-items:center; justify-content:space-between; gap:20px; flex-wrap:wrap; flex:1;">
+        <p style="margin:0; max-width:44ch;">Bucket-list itineraries we run again and again, each one designed to be effortless from the moment you enquire.</p>
+        <div style="display:flex; gap:10px; flex-shrink:0;">
+          <button id="trips-prev" class="trips-nav-btn" aria-label="Previous trips">←</button>
+          <button id="trips-next" class="trips-nav-btn" aria-label="Next trips">→</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="trip-grid" id="home-trips-grid"></div>
+
+    <div id="trips-dots" style="display:flex; justify-content:center; gap:9px; margin-top:30px;"></div>
+  </div>
+</section>
+
+<style>
+.trips-nav-btn{
+  width:46px; height:46px; border-radius:50%;
+  border:1px solid var(--line); background:var(--surface);
+  color:var(--text); cursor:pointer; font-size:18px;
+  display:grid; place-items:center;
+  transition:.35s var(--ease);
+}
+.trips-nav-btn:hover{ background:var(--gold); border-color:var(--gold); color:#fff; }
+.trips-dot{
+  width:28px; height:3px; border-radius:3px; border:0;
+  background:rgba(28,26,23,.18); cursor:pointer;
+  padding:0; transition:.4s var(--ease);
+}
+.trips-dot.active{ background:var(--gold); width:44px; }
+#home-trips-grid .trip-card__price{
+  font-family:var(--serif); font-size:20px; color:var(--gold-deep);
+  font-weight:500; margin:10px 0 2px;
+}
+#home-trips-grid .trip-card__price small{
+  font-size:12px; color:var(--muted); font-weight:400;
+}
+#home-trips-grid .trip-badge--event{
+  background:var(--gold) !important; color:#fff !important;
+}
+</style>
+
+<script>
+(function(){
+  var TRIPS = [
+    { loc:"Namibia · Africa",              name:"Namibia Desert Escape",              desc:"Sandwich Harbour, a desert picnic, camel and quad biking, and a catamaran cruise along the Atlantic Coast.",              days:"5 Days",  type:"Group",   price:"From R19,800", badge:"Group Trip",    img:"https://images.unsplash.com/photo-1489392191049-fc10c97e64b6?w=900&h=700&fit=crop&q=85&auto=format" },
+    { loc:"Cape Town · South Africa",      name:"Cape Town Ladies Escape",            desc:"Wine tasting, a sunset cruise, quad biking and slow lounge access, from the foot of Table Mountain.",                    days:"4 Days",  type:"Group",   price:"From R15,500", badge:"Group Trip",    img:"https://images.unsplash.com/photo-1576485290814-1c72aa4bbb8e?w=900&h=700&fit=crop&q=85&auto=format" },
+    { loc:"Knysna · South Africa",         name:"Knysna Villa Retreat",               desc:"A villa on the Garden Route with a sunset yacht cruise, zipline, elephant park and daily dinner included.",               days:"4 Days",  type:"Group",   price:"From R22,500", badge:"Group Trip",    img:"https://images.unsplash.com/photo-1534447677768-be436bb09401?w=900&h=700&fit=crop&q=85&auto=format" },
+    { loc:"Mauritius · East Africa",       name:"Mauritius Island All-Inclusive",     desc:"Water skiing, glass-bottom boat, snorkelling, kayaks and windsurfing, all meals and local drinks included.",            days:"6 Days",  type:"Group",   price:"From R48,400", badge:"Group Trip",    img:"https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=900&h=700&fit=crop&q=85&auto=format" },
+    { loc:"Greece · Europe",               name:"Greece Island Escape",               desc:"Athens city tour, catamaran cruise, Santorini sunsets and Mykonos, 8 nights with ferry transfers included.",            days:"10 Days", type:"Group",   price:"From R58,200", badge:"Group Trip",    img:"https://images.unsplash.com/photo-1533105079780-92b9be482077?w=900&h=700&fit=crop&q=85&auto=format" },
+    { loc:"Switzerland · Europe",          name:"Switzerland Summer Circuit",         desc:"Zürich, Lucerne and Zermatt, Swiss travel pass, Jungfraujoch in the clouds, Lindt chocolate tour and day trip to Milan.",days:"9 Days",  type:"Group",   price:"From R69,500", badge:"Group Trip",    img:"https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?w=900&h=700&fit=crop&q=85&auto=format" },
+    { loc:"Rome · Florence · Milan",       name:"Italian Grand Tour",                 desc:"Rome's ancient city, the Amalfi Coast, Positano, Florence's art and the beauty of Lake Como and Lugano.",               days:"9 Days",  type:"Group",   price:"From R59,800", badge:"Group Trip",    img:"https://images.unsplash.com/photo-1552832230-c0197dd311b5?w=900&h=700&fit=crop&q=85&auto=format" },
+    { loc:"Paris &amp; Barcelona",         name:"Paris &amp; Barcelona Explorer",     desc:"The Seine at sunset, Paris's iconic landmarks, then Barcelona's architecture and the Mediterranean coastline.",          days:"8 Days",  type:"Group",   price:"From R53,500", badge:"Group Trip",    img:"https://images.unsplash.com/photo-1502602898657-3e91760cbb34?w=900&h=700&fit=crop&q=85&auto=format" },
+    { loc:"Paris · France",                name:"Paris City Escape",                  desc:"Paris city tour and a romantic Seine cruise, 6 nights in the City of Light with return flights included.",              days:"8 Days",  type:"Group",   price:"From R47,200", badge:"Group Trip",    img:"https://images.unsplash.com/photo-1502602898657-3e91760cbb34?w=900&h=700&fit=crop&q=85&auto=format" },
+    { loc:"Italy &amp; France",            name:"Italy &amp; France Grand Tour",      desc:"4 nights in Rome, Amalfi Coast, Positano &amp; Sorrento, then 3 nights in Paris with city tour and Seine cruise.",    days:"9 Days",  type:"Group",   price:"From R57,800", badge:"Group Trip",    img:"https://images.unsplash.com/photo-1552832230-c0197dd311b5?w=900&h=700&fit=crop&q=85&auto=format" },
+    { loc:"France · Belgium · Netherlands",name:"France, Belgium &amp; Netherlands",  desc:"Paris Seine cruise, Brussels city tour, Amsterdam canal cruise and intercity trains, 9 nights across three countries.",  days:"9 Days",  type:"Group",   price:"From R53,400", badge:"Group Trip",    img:"https://images.unsplash.com/photo-1534351590666-13e3e96b5017?w=900&h=700&fit=crop&q=85&auto=format" },
+    { loc:"South of France · Europe",      name:"South of France Riviera",            desc:"Nice city tour, day trips to St Tropez, Cannes &amp; Monaco, and a catamaran cruise along the French Riviera.",         days:"8 Days",  type:"Group",   price:"From R61,800", badge:"Group Trip",    img:"https://images.unsplash.com/photo-1533105079780-92b9be482077?w=900&h=700&fit=crop&q=85&auto=format" },
+    { loc:"Switzerland · Europe",          name:"Switzerland Christmas Circuit",      desc:"Christmas across Zürich, Grindelwald and Zermatt, festive markets, Jungfraujoch, First cliff walk and Swiss travel pass.",days:"9 Days",  type:"Group",   price:"From R71,600", badge:"Group Trip",    img:"https://images.unsplash.com/photo-1519681393784-d120267933ba?w=900&h=700&fit=crop&q=85&auto=format" },
+    { loc:"Switzerland · Europe",          name:"Switzerland Snow &amp; St Moritz",   desc:"Zürich, Zermatt and St Moritz, Swiss Travel Pass, Lindt tour, Perrier-Jouët polo ticket and First Class Glacier Express.",days:"8 Days", type:"Group",   price:"From R79,400", badge:"Group Trip",    img:"https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?w=900&h=700&fit=crop&q=85&auto=format" },
+    { loc:"Finland · Europe",              name:"Finland Winter Wonderland",          desc:"Santa Claus Village, reindeer sleigh ride, husky sled ride and Arctic snowmobiling, 4 nights of Lapland magic.",        days:"6 Days",  type:"Group",   price:"From R71,800", badge:"Group Trip",    img:"https://images.unsplash.com/photo-1547981609-4b6bfe67ca0b?w=900&h=700&fit=crop&q=85&auto=format" },
+    { loc:"Dubai · UAE",                   name:"Dubai City &amp; Desert",            desc:"Yacht cruise on the Arabian Gulf, golden-hour desert safari, Miracle garden tour and UAE visa included.",                 days:"7 Days",  type:"Group",   price:"From R37,600", badge:"Group Trip",    img:"https://images.unsplash.com/photo-1470723710355-95304d8aece4?w=900&h=700&fit=crop&q=85&auto=format" },
+    { loc:"Dubai &amp; Thailand",          name:"Dubai &amp; Thailand Dual Escape",   desc:"Desert safari and yacht cruise in Dubai, then Phuket's Phi Phi Islands and city tour, 3 nights Dubai, 4 nights Phuket.",days:"10 Days", type:"Group",   price:"From R44,250", badge:"Group Trip",    img:"https://images.unsplash.com/photo-1528181304800-259b08848526?w=900&h=700&fit=crop&q=85&auto=format" },
+    { loc:"Phuket · Thailand",             name:"Phuket Island Escape",               desc:"Phuket city tour, Phi Phi Islands &amp; Maya Bay, a luxury cruise and the iconic Big Buddha, 5 nights of Thai island magic.",days:"7 Days",type:"Group",   price:"From R33,000", badge:"Group Trip",    img:"https://images.unsplash.com/photo-1528181304800-259b08848526?w=900&h=700&fit=crop&q=85&auto=format" },
+    { loc:"Phuket &amp; Bangkok",          name:"Phuket &amp; Bangkok Explorer",      desc:"4 nights in Phuket, Big Buddha, Phi Phi Island, then 3 nights in Bangkok for city tour and long tail boat ride.",     days:"9 Days",  type:"Group",   price:"From R42,000", badge:"Group Trip",    img:"https://images.unsplash.com/photo-1508009603885-50cf7c579365?w=900&h=700&fit=crop&q=85&auto=format" },
+    { loc:"Bali · Indonesia",              name:"Bali Island Adventure",              desc:"Bali swing &amp; nest, Bali highlight tour, Nusa Penida tour, Ubud vintage car, 7 nights in paradise.",                 days:"9 Days",  type:"Group",   price:"From R37,500", badge:"Group Trip",    img:"https://images.unsplash.com/photo-1604999333679-b86d54738315?w=900&h=700&fit=crop&q=85&auto=format" },
+    { loc:"Bali &amp; Singapore",          name:"Bali &amp; Singapore Duo",           desc:"5 nights in Bali, swing, Nusa Penida and beach clubs, then 2 nights in Singapore for the city tour and skyline.",      days:"9 Days",  type:"Group",   price:"From R45,500", badge:"Group Trip",    img:"https://images.unsplash.com/photo-1525625293386-3f8f99389edd?w=900&h=700&fit=crop&q=85&auto=format" },
+    { loc:"Maldives · South Asia",         name:"Maldives Escape",                    desc:"5 nights in paradise, return flights, daily breakfast, lunch &amp; dinner and all local drinks included. Choose your dates.",days:"6 Days",type:"Group",   price:"From R56,000", badge:"Group Trip",    img:"https://images.unsplash.com/photo-1514282401047-d79a71a590e8?w=900&h=700&fit=crop&q=85&auto=format" },
+    { loc:"Maldives &amp; Dubai",          name:"Maldives &amp; Dubai New Year",      desc:"Four all-inclusive nights in the Maldives, then ring in the new year with four nights in Dubai's glittering skyline.",   days:"10 Days", type:"Group",   price:"From R75,900", badge:"Group Trip",    img:"https://images.unsplash.com/photo-1518684079-3c830dcef090?w=900&h=700&fit=crop&q=85&auto=format" },
+    { loc:"Monaco · Bahrain · Abu Dhabi",  name:"F1 Grand Prix Experience",           desc:"From the glamour of Monaco to the lights of Bahrain and the season finale in Abu Dhabi, trackside with BoineeloMove.",  days:"6 Days",  type:"Special", price:"From R46,800", badge:"Special Event", img:"uploads/7cc35ff6f8e65c61a175f0cca6125063.jpg" },
+    { loc:"Swaziland · Africa",            name:"MTN Bushfire 2027, Glamping",       desc:"Three nights glamping with hot showers, VIP flush toilets, daily breakfast, full festival ticket and return transport.",  days:"4 Days",  type:"Special", price:"From R11,500", badge:"Special Event", img:"https://images.unsplash.com/photo-1429962714451-bb934ecdc4ec?w=900&h=700&fit=crop&q=85&auto=format" }
+  ];
+
+  var PAGE  = 4;
+  var pages = Math.ceil(TRIPS.length / PAGE);
+  var page  = 0;
+  var timer;
+
+  var grid    = document.getElementById('home-trips-grid');
+  var dotsEl  = document.getElementById('trips-dots');
+  var prevBtn = document.getElementById('trips-prev');
+  var nextBtn = document.getElementById('trips-next');
+
+  /* build dots */
+  for (var d = 0; d < pages; d++) {
+    var dot = document.createElement('button');
+    dot.className = 'trips-dot' + (d === 0 ? ' active' : '');
+    dot.setAttribute('aria-label', 'Page ' + (d + 1));
+    (function(idx){ dot.addEventListener('click', function(){ goTo(idx); }); })(d);
+    dotsEl.appendChild(dot);
+  }
+
+  function card(t) {
+    var isEvent = t.badge === 'Special Event';
+    return '<article class="trip-card">' +
+      '<div class="frame">' +
+        '<span class="trip-badge' + (isEvent ? ' trip-badge--event' : '') + '">' + t.badge + '</span>' +
+        '<img src="' + t.img + '" alt="' + t.name + '" loading="lazy" />' +
+      '</div>' +
+      '<div class="trip-card__body">' +
+        '<div class="trip-card__loc">' + t.loc + '</div>' +
+        '<h3 class="trip-card__name">' + t.name + '</h3>' +
+        '<p class="trip-card__desc">' + t.desc + '</p>' +
+        '<div class="trip-card__price">' + t.price + '</div>' +
+        '<div class="trip-card__meta"><span>◷ ' + t.days + '</span><span>◍ ' + t.type + '</span></div>' +
+        '<a href="contact.html" class="btn btn-ghost">Enquire <span class="arrow">→</span></a>' +
+      '</div>' +
+    '</article>';
+  }
+
+  function goTo(p) {
+    clearInterval(timer);
+    page = ((p % pages) + pages) % pages;
+
+    grid.style.transition = 'opacity .28s ease, transform .28s ease';
+    grid.style.opacity    = '0';
+    grid.style.transform  = 'translateY(10px)';
+
+    setTimeout(function(){
+      var markup = '';
+      for (var i = 0; i < PAGE; i++) {
+        markup += card(TRIPS[(page * PAGE + i) % TRIPS.length]);
+      }
+      grid.innerHTML = markup;
+      grid.style.transform = 'translateY(0)';
+      grid.style.opacity   = '1';
+
+      /* stagger entrance */
+      var cards = grid.querySelectorAll('.trip-card');
+      cards.forEach(function(c, i){
+        c.style.opacity   = '0';
+        c.style.transform = 'translateY(14px)';
+        c.style.transition = 'opacity .45s ease ' + (i * 90) + 'ms, transform .45s ease ' + (i * 90) + 'ms';
+        setTimeout(function(){ c.style.opacity='1'; c.style.transform='translateY(0)'; }, 30);
+      });
+
+      /* dots */
+      dotsEl.querySelectorAll('.trips-dot').forEach(function(d, i){
+        d.classList.toggle('active', i === page);
+      });
+
+      startAuto();
+    }, 260);
+  }
+
+  function startAuto(){
+    timer = setInterval(function(){ goTo(page + 1); }, 6000);
+  }
+
+  prevBtn.addEventListener('click', function(){ goTo(page - 1); });
+  nextBtn.addEventListener('click', function(){ goTo(page + 1); });
+
+  goTo(0);
+})();
+</script>
+
+
+
+<!-- ===================== GROUP vs PRIVATE ===================== -->
+<section class="section-pad" data-screen-label="Home / Group vs Private">
+  <div class="wrap">
+    <div class="center reveal" style="max-width:640px; margin:0 auto 50px;">
+      <span class="eyebrow center">Two ways to travel</span>
+      <h2 class="h2" style="margin-top:16px;">Find your kind of journey</h2>
+    </div>
+    <div class="split">
+      <div class="split__panel reveal">
+        <div class="frame" data-label="[ GROUP TRIP PHOTO ]"><img src="uploads/gallery/3E02CF94-9FFE-48F7-8F63-417535544A81-scaled-3f7051a0.jpeg" alt="Group adventure, ATV dunes" loading="lazy" style="object-position:center center;" /></div>
+        <div class="split__body">
+          <span class="eyebrow center" style="color:#fff;">Group Trips</span>
+          <h3 class="h3">Adventure, together</h3>
+          <p>The best and most fun way to travel: new adventures, culturally captivating experiences and a brilliant way to expand your network.</p>
+          <a href="group-trips.html" class="btn btn-light">View group trips <span class="arrow">→</span></a>
+        </div>
+      </div>
+      <div class="split__panel reveal" data-d="1">
+        <div class="frame" data-label="[ PRIVATE TRIP PHOTO ]" style="background:#0c0c0d;"><img src="uploads/gallery/08429A38-C20E-4E46-96ED-5E0B9A27408E-scaled-848d407d.jpeg" alt="Maldives overwater hammock, private luxury" loading="lazy" style="object-fit:cover; object-position:center center;" /></div>
+        <div class="split__body">
+          <span class="eyebrow center" style="color:#fff;">Private Trips</span>
+          <h3 class="h3">Tailored entirely to you</h3>
+          <p>Your much needed solo trip, a couples' getaway, a family vacay or a friends' trip. Each itinerary curated and executed with care.</p>
+          <a href="private-trips.html" class="btn btn-light">View private trips <span class="arrow">→</span></a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== WHY US (timeline) ===================== -->
+<section class="section-pad" style="background:var(--bg-2);" data-screen-label="Home / Why us">
+  <div class="wrap">
+    <div class="center reveal" style="max-width:640px; margin:0 auto 64px;">
+      <span class="eyebrow center">Why BoineeloMove</span>
+      <h2 class="h2" style="margin-top:16px;">Travel, the way it should feel</h2>
+    </div>
+
+    <div class="timeline">
+      <div class="tl-row reveal">
+        <div class="tl-text"><div class="num">01</div><h3 class="h3">Effortless &amp; stress-free</h3><p>We handle the details so you don't have to, from every booking, transfer and reservation curated end to end.</p></div>
+        <div class="tl-dot"></div>
+        <div class="tl-img"><div class="frame" data-label="[ TRAVEL MOMENT PHOTO ]"><img src="uploads/gallery/87374466-B8B1-4B48-A826-79183C404084-scaled-06c7f728.jpeg" alt="Effortless travel moment" loading="lazy" style="object-position:center 30%;" /></div></div>
+      </div>
+      <div class="tl-row reveal">
+        <div class="tl-text"><div class="num">02</div><h3 class="h3">Bucket-list experiences</h3><p>We break barriers and make travel exciting. The trips you've always promised yourself, made real.</p></div>
+        <div class="tl-dot"></div>
+        <div class="tl-img"><div class="frame" data-label="[ EXPERIENCE PHOTO ]" style="background:#0e0e0e;"><img src="uploads/gallery/IMG_3715-871f2c8a.jpeg" alt="Bucket-list experience" loading="lazy" style="object-fit: fill; object-position: center center; width: 520px" /></div></div>
+      </div>
+      <div class="tl-row reveal">
+        <div class="tl-text"><div class="num">03</div><h3 class="h3">Carefully customised</h3><p>Each itinerary is curated and executed with care and special diligence, designed around how you love to travel.</p></div>
+        <div class="tl-dot"></div>
+        <div class="tl-img"><div class="frame" data-label="[ ITINERARY PHOTO ]"><img src="uploads/gallery/06892BBB-6EE9-4A6D-88E4-1B8A8DF49D3E-scaled-5d0c7610.jpeg" alt="Carefully customised itinerary" loading="lazy" style="object-fit: cover; object-position: center 20%; width: 463px" /></div></div>
+      </div>
+      <div class="tl-row reveal">
+        <div class="tl-text"><div class="num">04</div><h3 class="h3">A community of travellers</h3><p>From five ladies in 2021 to sold-out group departures, join a growing community that adventures together.</p></div>
+        <div class="tl-dot"></div>
+        <div class="tl-img"><div class="frame" data-label="[ COMMUNITY PHOTO ]"><img src="uploads/gallery/49D36A5A-6BEF-490A-BF5B-D655BE6336F0-1-scaled-665fb95b.jpeg" alt="A community of travellers" loading="lazy" style="object-fit:cover; object-position:center 30%;" /></div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== TESTIMONIALS ===================== -->
+<section class="section-pad" data-screen-label="Home / Testimonials">
+  <div class="wrap">
+    <div class="center reveal" style="max-width:640px; margin:0 auto 54px;">
+      <span class="eyebrow center">Traveller stories</span>
+      <h2 class="h2" style="margin-top:16px;">Moments that made the journey</h2>
+    </div>
+    <div class="dest-grid" style="grid-template-columns:repeat(3,1fr);">
+      <figure class="reveal" style="background:var(--surface); border:1px solid var(--line-2); border-radius:8px; padding:30px; margin:0; display:flex; flex-direction:column; gap:18px;">
+        <div style="color:var(--gold); font-family:var(--serif); font-size:46px; line-height:.4;">&ldquo;</div>
+        <blockquote style="margin:0; font-family:var(--serif); font-size:21px; line-height:1.4; color:var(--text);">Booking with BoineeloMove was the easiest decision. Everything was handled and all I had to do was show up and enjoy.</blockquote>
+        <figcaption style="display:flex; align-items:center; gap:13px; margin-top:auto;">
+          <div class="frame" data-label="[ PHOTO ]" style="width:48px; height:48px; border-radius:50%; flex-shrink:0; overflow:hidden;"><img src="uploads/e7a3101564be78de63722dab72853155.jpg" alt="Lerato M." style="width:100%;height:100%;object-fit:cover;" /></div>
+          <div><div style="font-weight:500; font-size:14.5px;">Lerato M.</div><div style="font-size:12.5px; color:var(--muted);">Cape Town Ladies Escape</div></div>
+        </figcaption>
+      </figure>
+      <figure class="reveal" data-d="1" style="background:var(--surface); border:1px solid var(--line-2); border-radius:8px; padding:30px; margin:0; display:flex; flex-direction:column; gap:18px;">
+        <div style="color:var(--gold); font-family:var(--serif); font-size:46px; line-height:.4;">&ldquo;</div>
+        <blockquote style="margin:0; font-family:var(--serif); font-size:21px; line-height:1.4; color:var(--text);">Zanzibar exceeded every expectation. I've travelled before, but never felt this looked-after the whole way through.</blockquote>
+        <figcaption style="display:flex; align-items:center; gap:13px; margin-top:auto;">
+          <div class="frame" data-label="[ PHOTO ]" style="width:48px; height:48px; border-radius:50%; flex-shrink:0; overflow:hidden;"><img src="uploads/336ebda24ad7777d222ecbfeca6625a1.jpg" alt="Thandiwe K." style="width:100%;height:100%;object-fit:cover;" /></div>
+          <div><div style="font-weight:500; font-size:14.5px;">Thandiwe K.</div><div style="font-size:12.5px; color:var(--muted);">Zanzibar Island Retreat</div></div>
+        </figcaption>
+      </figure>
+      <figure class="reveal" data-d="2" style="background:var(--surface); border:1px solid var(--line-2); border-radius:8px; padding:30px; margin:0; display:flex; flex-direction:column; gap:18px;">
+        <div style="color:var(--gold); font-family:var(--serif); font-size:46px; line-height:.4;">&ldquo;</div>
+        <blockquote style="margin:0; font-family:var(--serif); font-size:21px; line-height:1.4; color:var(--text);">Our private Dubai trip was curated down to the smallest detail. Truly a R15,000-feeling experience and beyond.</blockquote>
+        <figcaption style="display:flex; align-items:center; gap:13px; margin-top:auto;">
+          <div class="frame" data-label="[ PHOTO ]" style="width:48px; height:48px; border-radius:50%; flex-shrink:0; overflow:hidden;"><img src="uploads/e7d03973cda8aa900537d466f12ca647.jpg" alt="Naledi &amp; Sipho" style="width:100%;height:100%;object-fit:cover;" /></div>
+          <div><div style="font-weight:500; font-size:14.5px;">Naledi </div><div style="font-size:12.5px; color:var(--muted);">Dubai Luxury Citybreak</div></div>
+        </figcaption>
+      </figure>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== FAQ ===================== -->
+<section class="section-pad" style="background:var(--bg-2);" data-screen-label="Home / FAQ">
+  <div class="wrap">
+    <div class="center reveal" style="max-width:640px; margin:0 auto 50px;">
+      <span class="eyebrow center">Good to know</span>
+      <h2 class="h2" style="margin-top:16px;">Frequently asked questions</h2>
+    </div>
+    <div class="faq">
+      <div class="faq-item reveal">
+        <button class="faq-q">How do I book a trip with BoineeloMove?<span class="faq-icon"></span></button>
+        <div class="faq-a"><p>Simply send us an enquiry through the contact page or WhatsApp. We'll get back to you to understand what you're looking for, then curate and customise an itinerary just for you.</p></div>
+      </div>
+      <div class="faq-item reveal">
+        <button class="faq-q">What's the difference between group and private trips?<span class="faq-icon"></span></button>
+        <div class="faq-a"><p>Group trips are set departures where you travel with a like-minded community, perfect for meeting new people and expanding your network. Private trips are designed entirely around you, whether solo, as a couple, family or group of friends.</p></div>
+      </div>
+      <div class="faq-item reveal">
+        <button class="faq-q">Can you customise an itinerary for me?<span class="faq-icon"></span></button>
+        <div class="faq-a"><p>Absolutely. Customisation is at the heart of what we do. Every trip is curated and executed with care and special diligence, tailored to how you love to travel.</p></div>
+      </div>
+      <div class="faq-item reveal">
+        <button class="faq-q">Which destinations do you travel to?<span class="faq-icon"></span></button>
+        <div class="faq-a"><p>Across Africa and internationally, from Cape Town, Zanzibar, Morocco and Namibia to Dubai, Thailand, Bali and the Maldives. If your dream destination isn't listed, just ask.</p></div>
+      </div>
+      <div class="faq-item reveal">
+        <button class="faq-q">How far in advance should I book?<span class="faq-icon"></span></button>
+        <div class="faq-a"><p>Our group departures often sell out, so the earlier the better. For private trips we recommend reaching out a few months ahead to secure the best stays and experiences.</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== FOOTER ===================== -->
+<footer class="footer">
+  <div class="wrap">
+    <div class="footer__top">
+      <div class="footer__brand">
+        <div class="mark">Boineelo<b>Move</b></div>
+        <p>A boutique South African tour operator crafting bucket-list group and private journeys across Africa and the world.</p>
+        <div class="footer__socials">
+          <a href="https://instagram.com/boineelomove_travel" target="_blank" rel="noopener" aria-label="Instagram"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg></a>
+          <a href="https://www.tiktok.com/@boineelomove" target="_blank" rel="noopener" aria-label="TikTok"><svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor"><path d="M16 3c.3 2 1.5 3.4 3.5 3.7v2.6c-1.3 0-2.5-.4-3.5-1v5.6a5.4 5.4 0 1 1-5.4-5.4c.3 0 .6 0 .9.1v2.7a2.7 2.7 0 1 0 1.9 2.6V3H16z"/></svg></a>
+          <a href="https://youtube.com/@Boineelomove" target="_blank" rel="noopener" aria-label="YouTube"><svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor"><path d="M22 8.2a3 3 0 0 0-2.1-2.1C18 5.6 12 5.6 12 5.6s-6 0-7.9.5A3 3 0 0 0 2 8.2 31 31 0 0 0 1.7 12 31 31 0 0 0 2 15.8a3 3 0 0 0 2.1 2.1c1.9.5 7.9.5 7.9.5s6 0 7.9-.5a3 3 0 0 0 2.1-2.1c.3-1.3.3-3.8.3-3.8s0-2.5-.3-3.8zM10 15V9l5 3-5 3z"/></svg></a>
+        </div>
+      </div>
+      <div>
+        <h4>Explore</h4>
+        <ul>
+          <li><a href="index.html">Home</a></li>
+          <li><a href="about.html">About Us</a></li>
+          <li><a href="gallery.html">Gallery</a></li>
+          <li><a href="contact.html">Contact</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Trips</h4>
+        <ul>
+          <li><a href="group-trips.html">Group Trips</a></li>
+          <li><a href="private-trips.html">Private Trips</a></li>
+          <li><a href="contact.html">Plan a Journey</a></li>
+        </ul>
+      </div>
+      <div class="footer__contact">
+        <h4>Get in touch</h4>
+        <a href="tel:+27645198120">+27 64 519 8120</a>
+        <a href="mailto:contact@boineelomove.com">contact@boineelomove.com</a>
+        <span>Sandton, GP · South Africa</span>
+        <a href="https://wa.me/27645198120" target="_blank" rel="noopener" style="color:var(--gold);">Chat on WhatsApp →</a>
+      </div>
+    </div>
+    <div class="footer__bottom">
+      <span>© <span data-year>2026</span> BoineeloMove. All rights reserved.</span>
+      <span>Travel more · Break barriers · Make memories</span>
+    </div>
+  </div>
+</footer>
+
+<!-- ===================== WHATSAPP FLOAT ===================== -->
+<a class="wa" href="https://wa.me/27645198120" target="_blank" rel="noopener" aria-label="Chat on WhatsApp">
+  <svg viewBox="0 0 32 32" fill="currentColor"><path d="M16 3C9 3 3.4 8.6 3.4 15.6c0 2.4.7 4.7 1.9 6.7L3 29l6.9-2.2c1.9 1 4 1.6 6.1 1.6 7 0 12.6-5.6 12.6-12.6S23 3 16 3zm0 22.8c-1.9 0-3.7-.5-5.3-1.5l-.4-.2-4.1 1.3 1.3-4-.2-.4a10.3 10.3 0 0 1-1.6-5.6c0-5.7 4.7-10.4 10.4-10.4S26.4 9.9 26.4 15.6 21.7 25.8 16 25.8zm5.7-7.8c-.3-.2-1.8-.9-2.1-1s-.5-.2-.7.2-.8 1-1 1.2-.4.3-.7.1a8.5 8.5 0 0 1-2.5-1.5 9.4 9.4 0 0 1-1.7-2.2c-.2-.3 0-.5.1-.7l.5-.6c.2-.2.2-.3.3-.5s0-.4 0-.6-.7-1.8-1-2.4c-.3-.6-.5-.5-.7-.5h-.6c-.2 0-.6.1-.9.4-.3.3-1.2 1.2-1.2 2.9s1.2 3.4 1.4 3.6c.2.3 2.5 3.8 6 5.3.8.4 1.5.6 2 .7.8.3 1.6.2 2.2.1.7-.1 2.1-.8 2.4-1.7.3-.8.3-1.6.2-1.7-.1-.2-.3-.2-.6-.4z"/></svg>
+</a>
+
+<script src="assets/photos.js"></script>
+<script src="assets/site.js"></script>
+
+<!-- Tweaks: React + Babel -->
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+<script type="text/babel" src="tweaks-panel.jsx"></script>
+
+<!-- Tweak engine -->
+<script>
+window.BMTweaks = (function(){
+  var MOODS = {
+    Airy: { bg:'#ffffff', bg2:'#f5f5f5', surface:'#ffffff', surface2:'#f2f2f2', text:'#1c1a17', muted:'#6b665d', muted2:'#9a9488', line:'rgba(28,26,23,.14)', line2:'rgba(28,26,23,.08)', navBg:'rgba(255,255,255,.92)', whyBg:'#ffffff', whyText:'#1c1a17', whyMuted:'#6b665d', footerBg:'#f5f5f5', statsBorder:'rgba(28,26,23,.08)' },
+    Dark:  { bg:'#0f0d0a', bg2:'#1a1710', surface:'#1c1a14', surface2:'#252218', text:'#f0ede6', muted:'#a89e8e', muted2:'#6b6458', line:'rgba(240,237,230,.12)', line2:'rgba(240,237,230,.07)', navBg:'rgba(15,13,10,.95)', whyBg:'#1a1710', whyText:'#f0ede6', whyMuted:'#a89e8e', footerBg:'#1a1710', statsBorder:'rgba(240,237,230,.09)' },
+    Sand:  { bg:'#faf9f6', bg2:'#f3efe8', surface:'#fdf9f2', surface2:'#f6f3ed', text:'#1c1a17', muted:'#6b665d', muted2:'#9a9488', line:'rgba(28,26,23,.14)', line2:'rgba(28,26,23,.08)', navBg:'rgba(250,249,246,.92)', whyBg:'#faf9f6', whyText:'#1c1a17', whyMuted:'#6b665d', footerBg:'#f3efe8', statsBorder:'rgba(28,26,23,.08)' }
+  };
+  var ACCENTS = {
+    '#b8912a': { main:'#b8912a', light:'#d4a837', deep:'#7a5f10', soft:'rgba(184,145,42,.14)' },
+    '#1a7a52': { main:'#1a7a52', light:'#229968', deep:'#0f5236', soft:'rgba(26,122,82,.14)' },
+    '#2a5098': { main:'#2a5098', light:'#3a68d0', deep:'#162d68', soft:'rgba(42,80,152,.14)' },
+    '#962855': { main:'#962855', light:'#c03870', deep:'#5e1638', soft:'rgba(150,40,85,.14)' }
+  };
+  var TYPES = {
+    Editorial: { serif:'"Cormorant Garamond", Georgia, serif', h1:'clamp(56px,9.5vw,138px)', h2:'clamp(34px,5.2vw,68px)', h3:'clamp(24px,3vw,36px)', weight:'500', lineH:'1.04' },
+    Modern:    { serif:'"Inter", system-ui, sans-serif',        h1:'clamp(40px,7vw,88px)',   h2:'clamp(26px,3.8vw,48px)', h3:'clamp(20px,2.4vw,28px)', weight:'600', lineH:'1.10' }
+  };
+  return {
+    apply: function(t) {
+      var m = MOODS[t.mood]   || MOODS.Airy;
+      var a = ACCENTS[t.accent] || ACCENTS['#b8912a'];
+      var f = TYPES[t.type]   || TYPES.Editorial;
+      var s = document.getElementById('bm-tweak-overrides');
+      if(!s){ s=document.createElement('style'); s.id='bm-tweak-overrides'; document.head.appendChild(s); }
+      s.textContent = [
+        ':root{',
+          '--bg:'+m.bg+';',
+          '--bg-2:'+m.bg2+';',
+          '--surface:'+m.surface+';',
+          '--surface-2:'+m.surface2+';',
+          '--text:'+m.text+';',
+          '--muted:'+m.muted+';',
+          '--muted-2:'+m.muted2+';',
+          '--line:'+m.line+';',
+          '--line-2:'+m.line2+';',
+          '--gold:'+a.main+';',
+          '--gold-2:'+a.light+';',
+          '--gold-deep:'+a.deep+';',
+          '--gold-soft:'+a.soft+';',
+          '--serif:'+f.serif+';',
+        '}',
+        'body{ background:'+m.bg+'; color:'+m.text+'; }',
+        '.nav{ color:'+m.text+'; }',
+        '.nav.scrolled{ background:'+m.navBg+' !important; }',
+        '[data-screen-label="Home / Why us"]{ background:'+m.whyBg+' !important; }',
+        '[data-screen-label="Home / Why us"] .eyebrow{ color:'+a.light+'; }',
+        '[data-screen-label="Home / Why us"] h2,[data-screen-label="Home / Why us"] .tl-text h3{ color:'+m.whyText+'; }',
+        '[data-screen-label="Home / Why us"] .tl-text p,[data-screen-label="Home / Why us"] .shead p{ color:'+m.whyMuted+'; }',
+        '.stats-row{ background:'+m.surface+'; border-color:'+m.statsBorder+'; }',
+        '.stat-num{ color:'+m.text+'; }',
+        '.stat-label{ color:'+m.muted+'; }',
+        '.footer{ background:'+m.footerBg+' !important; }',
+        '.insta__bg{ background:radial-gradient(120% 130% at 50% 0%,'+m.bg+' 0%,'+m.bg2+' 60%); }',
+        '.btn-gold,.btn-light{',
+          'background:linear-gradient(135deg,'+a.light+' 0%,'+a.deep+' 100%) !important;',
+          'box-shadow:inset 0 1px 0 rgba(255,255,255,.18),0 4px 16px '+a.soft+' !important;',
+        '}',
+        '.btn-gold:hover,.btn-light:hover{',
+          'background:linear-gradient(135deg,'+a.main+' 0%,'+a.deep+' 100%) !important;',
+        '}',
+        'h1,h2,h3{ font-weight:'+f.weight+'; line-height:'+f.lineH+'; }',
+        '.htext h1{ font-size:'+f.h1+' !important; }',
+        '.h2{ font-size:'+f.h2+' !important; }',
+        '.h3{ font-size:'+f.h3+' !important; }',
+      ].join('\n');
+    }
+  };
+})();
+</script>
+
+<div id="tweaks-root"></div>
+<script type="text/babel">
+(function(){
+  var _useTweaks = window.useTweaks;
+  var _TweaksPanel = window.TweaksPanel;
+  var _TweakSection = window.TweakSection;
+  var _TweakRadio = window.TweakRadio;
+  var _TweakColor = window.TweakColor;
+
+  var DEFAULTS = /*EDITMODE-BEGIN*/{
+    "mood": "Sand",
+    "type": "Editorial",
+    "accent": "#b8912a"
+  }/*EDITMODE-END*/;
+
+  function BoineeloTweaks() {
+    var result = _useTweaks(DEFAULTS);
+    var t = result[0], setTweak = result[1];
+
+    React.useEffect(function(){
+      window.BMTweaks.apply(t);
+    }, [t.mood, t.type, t.accent]);
+
+    return React.createElement(_TweaksPanel, null,
+      React.createElement(_TweakSection, { label: "Atmosphere" }),
+      React.createElement(_TweakRadio, {
+        label: "Mood",
+        value: t.mood,
+        options: ["Airy", "Dark", "Sand"],
+        onChange: function(v){ setTweak("mood", v); }
+      }),
+      React.createElement(_TweakSection, { label: "Typography" }),
+      React.createElement(_TweakRadio, {
+        label: "Voice",
+        value: t.type,
+        options: ["Editorial", "Modern"],
+        onChange: function(v){ setTweak("type", v); }
+      }),
+      React.createElement(_TweakSection, { label: "Colour" }),
+      React.createElement(_TweakColor, {
+        label: "Accent",
+        value: t.accent,
+        options: ["#b8912a", "#1a7a52", "#2a5098", "#962855"],
+        onChange: function(v){ setTweak("accent", v); }
+      })
+    );
+  }
+
+  var container = document.getElementById("tweaks-root");
+  var root = ReactDOM.createRoot(container);
+  root.render(React.createElement(BoineeloTweaks));
+})();
+</script>
+</body>
+</html>

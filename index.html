@@ -171,6 +171,21 @@
   .stat-item:nth-child(odd){ border-right:1px solid rgba(28,26,23,.07); }
   .stat-item:nth-last-child(-n+2){ border-bottom:none; }
 }
+
+/* ── Mobile overrides (must live here — this block loads after site.css) ── */
+@media (max-width: 760px) {
+  .intro { grid-template-columns: 1fr; gap: 28px; }
+  .intro__big { font-size: clamp(28px, 8vw, 40px); line-height: 1.2; }
+  .split { grid-template-columns: 1fr; gap: 16px; }
+  .split__panel { min-height: 340px; }
+  .shead { flex-direction: column; align-items: flex-start; gap: 18px; margin-bottom: 36px; }
+  .shead__l { max-width: 100%; }
+}
+@media (max-width: 480px) {
+  .split__panel { min-height: 280px; }
+  .split__body h3 { font-size: 24px; }
+  .split__body p { font-size: 14px; }
+}
 </style>
 </head>
 <body>

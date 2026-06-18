@@ -29,6 +29,7 @@
 
 *{ box-sizing:border-box; }
 html{ scroll-behavior:smooth; -webkit-text-size-adjust:100%; }
+html{ overflow-x:hidden; }
 body{
   margin:0;
   background:var(--bg);
@@ -1009,9 +1010,6 @@ section{ position:relative; }
    All rules are max-width — desktop is completely unaffected.
    Breakpoints: 900 · 760 · 600 · 480 · 380px
    ============================================================ */
-
-/* ─── Prevent horizontal overflow on all viewports ─── */
-body { overflow-x: hidden; }
 
 /* ─── Missing responsive stacks (critical fixes) ─── */
 @media (max-width: 760px) {

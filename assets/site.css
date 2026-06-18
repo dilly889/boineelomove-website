@@ -767,3 +767,464 @@ section{ position:relative; }
 /* CTA band button hover lift */
 .cta-band .btn{ transition:transform .4s var(--ease), box-shadow .4s var(--ease), background .4s var(--ease); }
 .cta-band .btn:hover{ transform:translateY(-3px) scale(1.03); }
+
+/* ============================================================
+   DESKTOP & LARGE-SCREEN PREMIUM OPTIMIZATION
+   Progressive enhancement — min-width only, mobile unaffected.
+   Breakpoints: 1280 · 1440 · 1600 · 1920 · 2560px
+   ============================================================ */
+
+/* ── Container: prevent over-narrow content on large monitors ── */
+@media (min-width: 1440px) {
+  :root { --maxw: 1360px; }
+}
+@media (min-width: 1920px) {
+  :root { --maxw: 1540px; }
+}
+@media (min-width: 2560px) {
+  :root { --maxw: 1840px; }
+}
+
+/* ── Navigation: breathing room on wide screens ── */
+@media (min-width: 1280px) {
+  .nav__links { gap: 40px; }
+}
+@media (min-width: 1600px) {
+  .nav__links { gap: 48px; }
+  .nav__right { gap: 24px; }
+}
+
+/* ── Hero: immersive layout on large screens ── */
+@media (min-width: 1280px) {
+  .htext { max-width: 720px; }
+  .hero__rail { width: 252px; }
+}
+@media (min-width: 1600px) {
+  .htext { max-width: 780px; }
+  .htext p { font-size: clamp(17px, 1.2vw, 21px); max-width: 50ch; }
+  .hero__rail { width: 268px; }
+  .hpreview { height: 138px; }
+  .hpreview__name { font-size: 22px; }
+  .hslide__note { left: clamp(48px, 5vw, 80px); }
+}
+@media (min-width: 1920px) {
+  .htext { max-width: 840px; }
+  .htext h1 { font-size: clamp(96px, 7.2vw, 152px); }
+  .htext p { font-size: clamp(18px, 1.15vw, 22px); }
+  .hero__rail { width: 286px; gap: 18px; }
+  .hpreview { height: 152px; }
+  .hpreview__name { font-size: 23px; }
+  .hero__nav { bottom: 52px; }
+  .hdot { width: 34px; }
+  .hdot.active { width: 52px; }
+  .harrow { width: 52px; height: 52px; font-size: 20px; }
+}
+
+/* ── Section padding: more generous whitespace on large displays ── */
+@media (min-width: 1600px) {
+  .section-pad { padding-block: clamp(110px, 9vw, 160px); }
+}
+
+/* ── Typography: scale headings and body for large screens ── */
+@media (min-width: 1280px) {
+  .lead { font-size: clamp(17px, 1.35vw, 21px); }
+}
+@media (min-width: 1920px) {
+  .h2   { font-size: clamp(36px, 4.2vw, 80px); }
+  .h3   { font-size: clamp(26px, 2.5vw, 42px); }
+  .lead { font-size: clamp(18px, 1.1vw, 22px); }
+}
+
+/* ── Intro section (home) ── */
+@media (min-width: 1280px) {
+  .intro { gap: clamp(56px, 6.5vw, 112px); }
+  .intro__big { font-size: clamp(32px, 3.2vw, 50px); }
+}
+
+/* ── Section heading helper ── */
+@media (min-width: 1280px) {
+  .shead { margin-bottom: 60px; }
+  .shead__l { max-width: 42ch; }
+}
+
+/* ── Destination cards ── */
+@media (min-width: 1440px) {
+  .dest-grid { gap: 24px; }
+  .dest-card__name { font-size: 32px; }
+  .dest-card__body { padding: 28px; }
+}
+
+/* ── Responsive 3-column grid (for testimonials — replaces hardcoded inline style) ── */
+.dest-grid--3col { grid-template-columns: repeat(3, 1fr); }
+@media (max-width: 900px) { .dest-grid--3col { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 600px) { .dest-grid--3col { grid-template-columns: 1fr; } }
+
+/* ── Trip grid ── */
+@media (min-width: 1440px) {
+  .trip-grid { gap: 26px; }
+  .trip-card__name { font-size: 27px; }
+}
+@media (min-width: 1920px) {
+  .trip-grid { gap: 30px; }
+  .trip-card__body { padding: 26px; gap: 14px; }
+}
+
+/* ── Split panels (Group vs Private) ── */
+@media (min-width: 1440px) {
+  .split { gap: 26px; }
+  .split__panel { min-height: 500px; }
+}
+@media (min-width: 1920px) {
+  .split { gap: 28px; }
+  .split__panel { min-height: 580px; }
+}
+
+/* ── Timeline (Why us) ── */
+@media (min-width: 1440px) {
+  .timeline { max-width: 1100px; }
+  .tl-row { margin-bottom: 64px; }
+  .tl-text p { font-size: 15.5px; max-width: 40ch; }
+}
+@media (min-width: 1920px) {
+  .timeline { max-width: 1300px; }
+  .tl-text p { font-size: 16px; max-width: 42ch; }
+}
+
+/* ── Stats row ── */
+@media (min-width: 1280px) {
+  .stats-row { max-width: 1020px; padding: 52px 56px; }
+}
+@media (min-width: 1920px) {
+  .stats-row { max-width: 1140px; padding: 58px 64px; }
+}
+
+/* ── FAQ ── */
+@media (min-width: 1440px) {
+  .faq { max-width: 1000px; }
+  .faq-q { font-size: clamp(22px, 1.8vw, 28px); padding: 28px 0; }
+}
+
+/* ── YouTube carousel: larger cards on wide screens ── */
+@media (min-width: 1400px) {
+  .yt-stage { height: 600px; }
+  .yt-cards { width: 300px; height: 534px; }
+  .yt-card  { width: 300px; }
+  .yt-card[data-pos="left"]  { transform: translateX(-278px) scale(0.76) rotateY(22deg); }
+  .yt-card[data-pos="right"] { transform: translateX(278px)  scale(0.76) rotateY(-22deg); }
+}
+@media (min-width: 1920px) {
+  .yt-stage { height: 680px; }
+  .yt-cards { width: 340px; height: 604px; }
+  .yt-card  { width: 340px; }
+  .yt-card[data-pos="left"]  { transform: translateX(-316px) scale(0.76) rotateY(22deg); }
+  .yt-card[data-pos="right"] { transform: translateX(316px)  scale(0.76) rotateY(-22deg); }
+}
+
+/* ── Footer ── */
+@media (min-width: 1440px) {
+  .footer__top { gap: 64px; }
+  .footer__brand p { max-width: 34ch; }
+}
+@media (min-width: 1920px) {
+  .footer__top { gap: 80px; padding-bottom: 80px; }
+}
+
+/* ── Page hero (inner pages) ── */
+@media (min-width: 1440px) {
+  .pagehero { min-height: 64vh; }
+  .pagehero h1 { font-size: clamp(52px, 6.5vw, 116px); }
+}
+@media (min-width: 1920px) {
+  .pagehero { min-height: 68vh; }
+}
+
+/* ── Two-column editorial (About, Private Trips) ── */
+@media (min-width: 1440px) {
+  .cols { gap: clamp(60px, 6.5vw, 100px); }
+}
+
+/* ── Trio / value cards ── */
+@media (min-width: 1440px) {
+  .trio { gap: 28px; }
+  .vcard { padding: 42px 34px; }
+}
+
+/* ── Steps (how it works) ── */
+@media (min-width: 1280px) {
+  .steps { gap: 36px; }
+  .step__ic { width: 82px; height: 82px; }
+  .step__ic svg { width: 32px; height: 32px; }
+}
+
+/* ── CTA band ── */
+@media (min-width: 1440px) {
+  .cta-band__inner { max-width: 54ch; }
+}
+
+/* ── Contact cards ── */
+@media (min-width: 1440px) {
+  .ct-cards { gap: 26px; }
+  .ct-card  { padding: 36px 32px 34px; }
+}
+
+/* ── Gallery masonry ── */
+@media (min-width: 1440px) {
+  .gal { column-gap: 22px; }
+  .gal__item { margin-bottom: 22px; }
+}
+@media (min-width: 1920px) {
+  .gal { columns: 4; column-gap: 24px; }
+}
+
+/* ── Testimonials ── */
+@media (min-width: 1440px) {
+  [data-screen-label$="Testimonials"] .dest-grid,
+  [data-screen-label$="Testimonials"] .dest-grid--3col { gap: 26px; }
+}
+
+/* ── Scrollbar ── */
+@media (min-width: 1920px) {
+  body::-webkit-scrollbar { width: 13px; }
+}
+
+/* ── Private Trips: feature cards + image strip ── */
+@media (min-width: 1440px) {
+  .feat-grid { gap: 26px; }
+  .feat { padding: 38px 32px 36px; }
+  .pt-intro { gap: clamp(56px, 7vw, 112px); }
+  .imgstrip { gap: 18px; }
+}
+@media (min-width: 1920px) {
+  .feat-grid { gap: 30px; }
+  .imgstrip { max-width: 1680px; gap: 22px; }
+}
+
+/* ── High-DPI / Retina ── */
+@media (min-resolution: 2dppx) {
+  body { text-rendering: optimizeLegibility; }
+}
+
+/* ============================================================
+   MOBILE & SMALL-SCREEN OPTIMIZATION
+   All rules are max-width — desktop is completely unaffected.
+   Breakpoints: 900 · 760 · 600 · 480 · 380px
+   ============================================================ */
+
+/* ─── Prevent horizontal overflow on all viewports ─── */
+body { overflow-x: hidden; }
+
+/* ─── Missing responsive stacks (critical fixes) ─── */
+@media (max-width: 760px) {
+  /* Home: intro two-column had no mobile override */
+  .intro { grid-template-columns: 1fr; gap: 36px; }
+  /* Home / Group vs Private: split panels had no mobile override */
+  .split { grid-template-columns: 1fr; gap: 16px; }
+  .split__panel { min-height: 380px; }
+}
+
+/* ─── Section padding: tighter on phones ─── */
+@media (max-width: 760px) {
+  .section-pad { padding-block: clamp(52px, 11vw, 80px); }
+}
+@media (max-width: 480px) {
+  .section-pad { padding-block: 52px; }
+}
+
+/* ─── Navigation ─── */
+@media (max-width: 760px) {
+  .nav { padding: 16px var(--gutter); }
+  .nav.scrolled { padding-block: 12px; }
+  .nav__logo img { height: 52px; }
+  .nav.scrolled .nav__logo img { height: 40px; }
+}
+
+/* ─── Mobile drawer: more comfortable spacing ─── */
+@media (max-width: 760px) {
+  .drawer a { font-size: 28px; padding: 12px 0; }
+  .drawer__contact { font-size: 13px; gap: 5px; }
+}
+
+/* ─── Hero: readable and cinematic on phones ─── */
+@media (max-width: 600px) {
+  .htext h1 { font-size: clamp(46px, 12vw, 56px); line-height: .96; }
+  .htext p  { font-size: 15px; margin-bottom: 24px; max-width: 38ch; }
+  .hero__nav { bottom: 28px; gap: 16px; }
+  .hdots { gap: 7px; }
+  .hdot { width: 26px; }
+  .hdot.active { width: 40px; }
+}
+@media (max-width: 380px) {
+  .htext h1 { font-size: 42px; }
+  .htext p  { font-size: 14.5px; }
+}
+
+/* ─── Page hero (inner pages): tighter on mobile ─── */
+@media (max-width: 760px) {
+  .pagehero { min-height: 52vh; }
+  .pagehero__inner { padding: 110px 0 50px; }
+  .pagehero h1 { font-size: clamp(38px, 9vw, 64px); }
+  .pagehero p { font-size: 15px; }
+}
+
+/* ─── Typography: prevent oversized text on phones ─── */
+@media (max-width: 480px) {
+  .h2 { font-size: clamp(30px, 8vw, 42px); }
+  .h3 { font-size: clamp(22px, 5.5vw, 30px); }
+  .lead { font-size: 16px; line-height: 1.65; }
+  .intro__big { font-size: clamp(26px, 7vw, 34px); line-height: 1.22; }
+}
+@media (max-width: 760px) {
+  .intro__big { font-size: clamp(28px, 6.5vw, 38px); line-height: 1.2; }
+}
+
+/* ─── Section heading helper: stack on mobile ─── */
+@media (max-width: 760px) {
+  .shead { flex-direction: column; align-items: flex-start; gap: 18px; margin-bottom: 36px; }
+  .shead__l { max-width: 100%; }
+  .shead p { font-size: 14.5px; }
+}
+
+/* ─── Filter tabs: allow horizontal scroll on mobile ─── */
+@media (max-width: 760px) {
+  .tabs {
+    overflow-x: auto; flex-wrap: nowrap;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none; max-width: 100%;
+  }
+  .tabs::-webkit-scrollbar { display: none; }
+  .tab { flex-shrink: 0; padding: 10px 18px; font-size: 12.5px; }
+  .gt-filter { justify-content: flex-start; overflow-x: auto; -webkit-overflow-scrolling: touch; padding-bottom: 4px; }
+}
+
+/* ─── Buttons: 48px touch targets ─── */
+@media (max-width: 760px) {
+  .btn { padding: 15px 26px; min-height: 48px; }
+  .harrow { width: 48px; height: 48px; }
+  .link-gold { font-size: 12.5px; }
+}
+
+/* ─── Stats row ─── */
+@media (max-width: 480px) {
+  .stats-row { padding: 28px 20px; border-radius: 6px; }
+  .stat-num { font-size: 2.1rem; }
+  .stat-label { font-size: .67rem; letter-spacing: .1em; }
+  .stat-item { padding: 20px 12px; }
+}
+
+/* ─── Timeline: better image proportion on mobile ─── */
+@media (max-width: 760px) {
+  .tl-img .frame { aspect-ratio: 16/9; }
+  .tl-text h3 { font-size: clamp(20px, 5vw, 26px); }
+}
+
+/* ─── Destination cards: less tall on mobile ─── */
+@media (max-width: 760px) {
+  .dest-card { aspect-ratio: 3/4; }
+}
+@media (max-width: 480px) {
+  .dest-card { aspect-ratio: 4/3; }
+  .dest-card__name { font-size: 26px; }
+  .dest-card__body { padding: 20px; }
+}
+
+/* ─── Trip cards ─── */
+@media (max-width: 480px) {
+  .trip-card__body  { padding: 18px; gap: 10px; }
+  .trip-card__name  { font-size: 22px; }
+  .trip-card .btn   { padding: 14px 22px; font-size: 12px; }
+}
+
+/* ─── Group trips: note bar ─── */
+@media (max-width: 600px) {
+  .gt-note { flex-direction: column; gap: 6px; padding: 16px 20px; text-align: center; }
+  .gt-note__dot { display: none; }
+}
+
+/* ─── Group trips: search box ─── */
+@media (max-width: 480px) {
+  .gt-search-box { max-width: 100%; }
+}
+
+/* ─── YouTube carousel: smaller on very small phones ─── */
+@media (max-width: 380px) {
+  .yt-stage { height: 430px; }
+  .yt-cards { width: 230px; height: 409px; }
+  .yt-card  { width: 230px; }
+  .yt-card[data-pos="left"]  { transform: translateX(-150px) scale(0.72) rotateY(22deg); }
+  .yt-card[data-pos="right"] { transform: translateX(150px)  scale(0.72) rotateY(-22deg); }
+}
+
+/* ─── FAQ: tighter on mobile ─── */
+@media (max-width: 480px) {
+  .faq-q { font-size: clamp(18px, 4.5vw, 22px); padding: 22px 0; gap: 16px; }
+  .faq-icon { width: 30px; height: 30px; flex-shrink: 0; }
+  .faq-a p { font-size: 15px; }
+}
+
+/* ─── CTA band: tighter on mobile ─── */
+@media (max-width: 760px) {
+  .cta-band__inner { max-width: 100%; padding: clamp(52px, 10vw, 80px) 0; }
+  .cta-band h2 { font-size: clamp(30px, 8vw, 46px); }
+}
+
+/* ─── Footer: better mobile layout ─── */
+@media (max-width: 480px) {
+  .footer { padding-top: clamp(48px, 8vw, 80px); }
+  .footer__bottom { flex-direction: column; align-items: center; gap: 8px; text-align: center; }
+  .footer__brand .mark { font-size: 26px; }
+}
+
+/* ─── WhatsApp float: compact on small phones ─── */
+@media (max-width: 480px) {
+  .wa { width: 54px; height: 54px; right: 16px; bottom: 16px; }
+  .wa svg { width: 26px; height: 26px; }
+}
+
+/* ─── Forms: prevent iOS auto-zoom on input focus ─── */
+@media (max-width: 760px) {
+  .field input,
+  .field select,
+  .field textarea { font-size: 16px; }
+}
+
+/* ─── Contact page: wa-banner text on small phones ─── */
+@media (max-width: 480px) {
+  .wa-banner__l h3 { font-size: 24px; }
+  .wa-banner__l p  { font-size: 14px; }
+}
+
+/* ─── Private trips: feature cards ─── */
+@media (max-width: 480px) {
+  .feat { padding: 26px 22px 24px; }
+  .feat h3 { font-size: 20px; }
+  .feat-grid { gap: 16px; }
+}
+
+/* ─── About / Private trips: cols layout ─── */
+@media (max-width: 480px) {
+  .cols .frame { aspect-ratio: 4/3; }
+}
+
+/* ─── Contact cards: better spacing on mobile ─── */
+@media (max-width: 480px) {
+  .ct-card { padding: 26px 22px; }
+  .ct-card h3 { font-size: 18px; }
+}
+
+/* ─── Testimonials: tighter on mobile ─── */
+@media (max-width: 480px) {
+  .dest-grid--3col figure { padding: 22px !important; }
+}
+
+/* ─── Performance: lighter animations on mobile ─── */
+@media (max-width: 760px) {
+  /* Reduce Ken Burns intensity on mobile to ease GPU */
+  @keyframes kenburns {
+    from { transform: scale(1.06) translate(1%, -.5%); }
+    to   { transform: scale(1.0) translate(0, 0); }
+  }
+  /* Snap reveal animations (shorter travel distance) */
+  .reveal { transform: translateY(20px); }
+  /* Reduce section-specific parallax */
+  .pagehero__bg { top: 0; height: 100%; }
+}
